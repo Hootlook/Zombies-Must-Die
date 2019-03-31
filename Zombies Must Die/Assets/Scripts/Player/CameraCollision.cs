@@ -10,22 +10,22 @@ public class CameraCollision : MonoBehaviour
 	public float smooth = 10.0f;
 	Vector3 dollyDir;
 	public float distance;
+	int layerMask;
 
-	// Use this for initialization
 	void Awake()
 	{
 		dollyDir = transform.localPosition.normalized;
 		distance = transform.localPosition.magnitude;
+		layerMask = 1 << 9;
+		layerMask = ~layerMask;
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
-
 		Vector3 desiredCameraPos = transform.parent.TransformPoint(dollyDir * maxDistance);
 		RaycastHit hit;
 
-		if (Physics.Linecast(transform.parent.position, desiredCameraPos, out hit))
+		if (Physics.Linecast(transform.parent.position, desiredCameraPos, out hit, layerMask))
 		{
 			distance = Mathf.Clamp((hit.distance * 0.87f), minDistance, maxDistance);
 

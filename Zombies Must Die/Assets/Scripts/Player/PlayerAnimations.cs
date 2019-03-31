@@ -13,8 +13,8 @@ public class PlayerAnimations : MonoBehaviour
 
     void Update()
     {
-
         a.SetFloat("Vertical", Input.GetAxis("Vertical"));
         a.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
+		a.SetBool("Aiming", Input.GetButton("Fire2"));
     }
 }
