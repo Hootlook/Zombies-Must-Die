@@ -54,13 +54,13 @@ public class WeaponManager : MonoBehaviour
 			i++;
 		}
 	}
-/*
+
 	private void OnAnimatorIK(int layerIndex)
 	{
-		Vector3 target = grip.transform.position + handOffset;
+		Vector3 target = grip.transform.position + grip.transform.TransformDirection(handOffset);
 		layerIndex = a.GetLayerIndex("Upper Body");
 		a.SetIKPosition(AvatarIKGoal.LeftHand, target);
 		a.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
 
-	}*/
+	}
 }

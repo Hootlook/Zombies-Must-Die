@@ -8,12 +8,7 @@ public class Shotgun : MonoBehaviour
 	public float range = 30;
 	[SerializeField]
 	GameObject impact;
-	public float spread = 0.3f;
-
-	void Start()
-    {
-        
-    }
+	public float maximumSpread = 0.3f;
 
     void Update()
     {
@@ -23,7 +18,15 @@ public class Shotgun : MonoBehaviour
 		{
 			for (int i = 0; i < pellets; i++)
 			{
-				Vector3 direction = Random.insideUnitCircle * spread;
+				//Get horizontal and vertical spread.
+				float spreadX = Random.Range(-maximumSpread, maximumSpread);
+				float spreadY = Random.Range(-maximumSpread, maximumSpread);
+				//Don't adjust depth of spread.
+				float spreadZ = 0f;
+				//Make spread converting from local space to world space.
+				Vector3 spread = Camera.main.transform.TransformDirection(new Vector3(spreadX, spreadY, spreadZ));
+				Vector3 direction = (Camera.main.transform.forward + spread).normalized;
+				//Vector3 direction = Random.insideUnitCircle * spread;  THE OLD WAY
 				if (Physics.Raycast(transform.position, Camera.main.transform.forward + direction, out hit, range))
 				{
 					Debug.Log(hit.transform.name);

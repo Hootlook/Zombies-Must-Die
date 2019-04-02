@@ -6,15 +6,16 @@ public class PlayerMovements : MonoBehaviour
 {
     CharacterController cc;
     Transform cameraT;
-    float speed;
-	[Range(1, 50)]
-	public float speedWhileAiming = 10;
-	[Range(1, 50)]
-	public float speedWhileNotAiming = 20;
-	public float jumpForce = 3;
-	public float gravityMultiplier = 2;
 	Vector3 moveDirection;
-	Vector3 storeCurDir;
+	
+	[Range(1, 15)]
+	public float speedWhileAiming = 2;
+	[Range(1, 15)]
+	public float speedWhileNotAiming = 4;
+
+	public float jumpForce = 8;
+	public float gravity = 20;
+	private float speed;
 
 	void Start()
     {
@@ -27,32 +28,26 @@ public class PlayerMovements : MonoBehaviour
         Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * speed * Time.deltaTime;
 		Vector2 inputDir = input.normalized;
 
-		if (inputDir != Vector2.zero || Input.GetButton("Fire2"))
+		if (inputDir != Vector2.zero || Input.GetButton("Fire2") || Input.GetButton("Fire1"))
 			transform.eulerAngles = Vector3.up * cameraT.eulerAngles.y;
-
-		float storeY = moveDirection.y;
-		moveDirection = ((transform.right * input.x) + (transform.forward * input.y)) * speed;
-		moveDirection.y = storeY;
-
-		moveDirection.y += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
 
 		speed = Input.GetButton("Fire2") ? speedWhileAiming : speedWhileNotAiming;
 
 		if (cc.isGrounded)
 		{
-			if (Input.GetButtonDown("Jump"))
+			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+			moveDirection = transform.TransformDirection(moveDirection);
+			moveDirection = moveDirection * speed;
+
+			if (Input.GetButton("Jump"))
 			{
 				moveDirection.y = jumpForce;
-				storeCurDir = moveDirection;
 			}
 		}
-		else
-		{
-			cc.Move(storeCurDir * Time.deltaTime);
-		}
+
+		moveDirection.y = moveDirection.y - (gravity * Time.deltaTime);
 
 		cc.Move(moveDirection * Time.deltaTime);
 
-		
 	}
 }
