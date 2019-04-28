@@ -1,46 +1,51 @@
-﻿using System.Collections;
+﻿using BeardedManStudios.Forge.Networking.Generated;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : PlayerBehavior {
 
 	[Range(1, 20)]
 	public float rotationSpeedY = 1;
 	[Range(1, 20)]
 	public float rotationSpeedX = 1;
 
-	public Vector3 distance = new Vector3(0, 0, 0.1f);
-	public Vector3 offset;
+	public Vector3 distance = new Vector3(0, 1, -5);
+	public Vector3 offset = new Vector3(0.8f, 0.8f, 8);
 	public Transform Target;
-	public float distanceY,distanceX;
-	public float horizontal = 10f;
-	public float vertical = 10f;
-	public float shoulderZ;
+	public float horizontal;
+	public float vertical;
 
+    Inputs i;
 
-	void Start ()
-	{
-		Target = GameObject.FindWithTag("Player").transform;
-		Cursor.lockState = CursorLockMode.Locked;
+    protected override void NetworkStart()
+    {
+        base.NetworkStart();
+
+        i = GameObject.FindGameObjectWithTag("Player").GetComponent<Inputs>();
+        
+        Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 	}
 
 	void Update () {
-	
-		vertical -= Input.GetAxis("Mouse Y") * rotationSpeedY;
+
+        if(Target == null) Target = GameObject.FindGameObjectWithTag("Player").transform;
+        vertical -= Input.GetAxis("Mouse Y") * rotationSpeedY;
 		horizontal +=  Input.GetAxis("Mouse X") * rotationSpeedX;
-		vertical = Mathf.Clamp(vertical, -70, 70);
+		vertical = Mathf.Clamp(vertical, -40, 40);
 	}
 
 	private void LateUpdate()
 	{
 		Vector3 dir = new Vector3(distance.x, distance.y, -distance.z);
-		Quaternion rotation = Quaternion.Euler(vertical, horizontal, 0);	
+		Quaternion rotation = Quaternion.Euler(vertical, horizontal, 0);
 
 		if (Input.GetButton("Fire2"))
 		{
 			transform.rotation = rotation;
 			transform.position = Target.position + rotation * offset;
+            //Camera.main.transform.localRotation = Quaternion.Euler(vertical, 0, 0);
 			
 		}
 		else

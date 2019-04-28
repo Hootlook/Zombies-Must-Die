@@ -1,20 +1,33 @@
-﻿using System.Collections;
+﻿using BeardedManStudios.Forge.Networking.Generated;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shotgun : MonoBehaviour
+public class Shotgun : PlayerBehavior
 {
 	public int pellets = 6;
 	public float range = 30;
 	[SerializeField]
 	GameObject impact;
 	public float maximumSpread = 0.3f;
+    public float fireTimer;
+    public float fireRate;
+    Inputs i;
+
+    protected override void NetworkStart()
+    {
+        base.NetworkStart();
+
+        i = GetComponentInParent<Inputs>();
+    }
 
     void Update()
     {
-		RaycastHit hit;
+        if (fireTimer < fireRate) { fireTimer += Time.fixedDeltaTime; }
 
-		if (Input.GetButtonDown("Fire1"))
+        RaycastHit hit;
+
+		if (i.isShooting)
 		{
 			for (int i = 0; i < pellets; i++)
 			{

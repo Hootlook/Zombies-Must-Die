@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using BeardedManStudios.Forge.Networking.Generated;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : PlayerBehavior
 {
 	public int selectedWeapon = 0;
 	[SerializeField]
@@ -11,15 +12,19 @@ public class WeaponManager : MonoBehaviour
 	Animator a;
 	public Vector3 handOffset;
 
-	void Start()
-	{
-		a = GetComponent<Animator>();
+    protected override void NetworkStart()
+    {
+        base.NetworkStart();
+
+        a = GetComponent<Animator>();
 		SelectWeapon();
 	}
 
 	void Update()
 	{
-		int previousSelectedWeapon = selectedWeapon;
+        if (networkObject == null) return;
+
+        int previousSelectedWeapon = selectedWeapon;
 
 		if (Input.GetAxis("Mouse ScrollWheel") > 0f)
 		{
@@ -54,7 +59,7 @@ public class WeaponManager : MonoBehaviour
 			i++;
 		}
 	}
-
+    /*
 	private void OnAnimatorIK(int layerIndex)
 	{
 		Vector3 target = grip.transform.position + grip.transform.TransformDirection(handOffset);
@@ -62,5 +67,5 @@ public class WeaponManager : MonoBehaviour
 		a.SetIKPosition(AvatarIKGoal.LeftHand, target);
 		a.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
 
-	}
+	}*/
 }

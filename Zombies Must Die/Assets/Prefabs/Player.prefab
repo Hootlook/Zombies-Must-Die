@@ -853,9 +853,11 @@ GameObject:
   - component: {fileID: 2928620854369820789}
   - component: {fileID: 666964653015254805}
   - component: {fileID: 4679128163326331495}
+  - component: {fileID: 1539510232}
+  - component: {fileID: 1539510226}
   m_Layer: 9
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -937,7 +939,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 221c5c849a3678d49a59a6160d6f2a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedWhileAiming: 2
+  spine: {fileID: 2065210390144690320}
+  offset: 57
+  speedWhileAiming: 1.5
   speedWhileNotAiming: 4
   jumpForce: 6
   gravity: 20
@@ -956,6 +960,36 @@ MonoBehaviour:
   selectedWeapon: 0
   weaponBone: {fileID: 3498640233936912550}
   handOffset: {x: 0.08, y: -0, z: -0.02}
+--- !u!114 &1539510232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065210390144529712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c13c8d5083f52f54ea214f0402c2585d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isJumping: 0
+  isAiming: 0
+  isShooting: 0
+  vertical: 0
+  horizontal: 0
+--- !u!114 &1539510226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065210390144529712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ba83b3e7c16c4e4ea7e71645c857573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 2630160453175328986, guid: ef2bf0f044e872b41945d968480d2fa1, type: 3}
 --- !u!1 &2065210390144529714
 GameObject:
   m_ObjectHideFlags: 0

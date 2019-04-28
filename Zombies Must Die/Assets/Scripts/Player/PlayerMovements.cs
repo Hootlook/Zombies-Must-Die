@@ -1,14 +1,19 @@
-﻿using System.Collections;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovements : MonoBehaviour
+public class PlayerMovements : PlayerBehavior
 {
     CharacterController cc;
-    Transform cameraT;
+    Transform camera;
+    Inputs i;
 	Vector3 moveDirection;
-	
-	[Range(1, 15)]
+    public Transform spine;
+    public float offset = 57;
+
+    [Range(1, 15)]
 	public float speedWhileAiming = 2;
 	[Range(1, 15)]
 	public float speedWhileNotAiming = 4;
@@ -17,37 +22,50 @@ public class PlayerMovements : MonoBehaviour
 	public float gravity = 20;
 	private float speed;
 
-	void Start()
+    private void Start()
     {
         cc = GetComponent<CharacterController>();
-		cameraT = Camera.main.transform;
+        i = GetComponent<Inputs>();
     }
 
     void Update()
     {
-        Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * speed * Time.deltaTime;
-		Vector2 inputDir = input.normalized;
+        if (networkObject == null) return;
 
-		if (inputDir != Vector2.zero || Input.GetButton("Fire2") || Input.GetButton("Fire1"))
-			transform.eulerAngles = Vector3.up * cameraT.eulerAngles.y;
+        if(camera == null) camera = Camera.main.transform;
 
-		speed = Input.GetButton("Fire2") ? speedWhileAiming : speedWhileNotAiming;
+        if (networkObject.IsOwner)
+        {
+            Vector2 input = new Vector2(i.horizontal, i.vertical) * speed * Time.deltaTime;
+            Vector2 inputDir = input.normalized;
 
-		if (cc.isGrounded)
-		{
-			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-			moveDirection = transform.TransformDirection(moveDirection);
-			moveDirection = moveDirection * speed;
+            if (inputDir != Vector2.zero || i.isAiming || i.isShooting)
+                transform.eulerAngles = Vector3.up * camera.eulerAngles.y;
 
-			if (Input.GetButton("Jump"))
-			{
-				moveDirection.y = jumpForce;
-			}
-		}
+            speed = i.isAiming ? speedWhileAiming : speedWhileNotAiming;
 
-		moveDirection.y = moveDirection.y - (gravity * Time.deltaTime);
+            if (cc.isGrounded)
+            {
+                moveDirection = new Vector3(i.horizontal, 0.0f, i.vertical);
+                moveDirection = transform.TransformDirection(moveDirection);
+                moveDirection = moveDirection * speed;
 
-		cc.Move(moveDirection * Time.deltaTime);
+                if (i.isJumping)
+                {
+                    moveDirection.y = jumpForce;
+                }
+            }
 
+
+            moveDirection.y = moveDirection.y - (gravity * Time.deltaTime);
+
+            cc.Move(moveDirection * Time.deltaTime);
+        }
 	}
+
+    private void LateUpdate()
+    {
+        if (i.isAiming)
+            spine.rotation = Quaternion.Euler(spine.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + offset, spine.rotation.eulerAngles.z);
+    }
 }

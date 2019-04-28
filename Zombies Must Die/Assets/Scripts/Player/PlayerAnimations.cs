@@ -1,27 +1,54 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using BeardedManStudios.Forge.Networking.Generated;
 using UnityEngine;
 
-public class PlayerAnimations : MonoBehaviour
+public class PlayerAnimations : PlayerBehavior
 {
     Animator a;
 	CharacterController cc;
+    CameraController cameraController;
+    PlayerNetworkSetup pns;
+    Inputs i;
 
-    void Start()
+    private void Start()
     {
         a = GetComponent<Animator>();
 		cc = GetComponent<CharacterController>();
+        i = GetComponent<Inputs>();
+        pns = GetComponent<PlayerNetworkSetup>();
     }
-
+     
     void Update()
     {
-        a.SetFloat("Vertical", Input.GetAxis("Vertical"));
-        a.SetFloat("Horizontal", Input.GetAxis("Horizontal"));
+        if (networkObject == null) return;
 
-		if (cc.isGrounded)
-		{
-			a.SetBool("Aiming", Input.GetButton("Fire2"));
-		}
+        cameraController = GameObject.Find("Camera(Clone)").GetComponent<CameraController>();
+
+        float aiming = i.isAiming ? 1 : 0;
+        float angleX = networkObject.IsOwner ? -cameraController.vertical : -pns.vertical;
+
+        a.SetFloat("AngleX", angleX);
+        a.SetFloat("Vertical", i.vertical);
+        a.SetFloat("Horizontal", i.horizontal);
+        a.SetBool("Shooting", i.isShooting);
+        a.SetLayerWeight(1, aiming);
+
+
+        if (networkObject.IsOwner)
+        {
+            if (cc.isGrounded)
+            {
+                a.SetBool("Aiming", i.isAiming);
+            }
+        }
+        else
+        {
+            if (pns.isGrounded)
+            {
+                a.SetBool("Aiming", i.isAiming);
+            }
+        }
+
 		
     }
+
 }
