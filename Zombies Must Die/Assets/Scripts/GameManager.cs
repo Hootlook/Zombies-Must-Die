@@ -1,18 +1,19 @@
-﻿using System.Collections;
+﻿using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : PlayerBehavior
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void NetworkStart()
     {
-        
+        base.NetworkStart();
+        NetworkManager.Instance.InstantiatePlayer();
     }
 }

@@ -31,29 +31,25 @@ public class CameraController : PlayerBehavior {
 	void Update () {
 
         if(Target == null) Target = GameObject.FindGameObjectWithTag("Player").transform;
+
         vertical -= Input.GetAxis("Mouse Y") * rotationSpeedY;
 		horizontal +=  Input.GetAxis("Mouse X") * rotationSpeedX;
 		vertical = Mathf.Clamp(vertical, -40, 40);
-	}
 
-	private void LateUpdate()
-	{
-		Vector3 dir = new Vector3(distance.x, distance.y, -distance.z);
-		Quaternion rotation = Quaternion.Euler(vertical, horizontal, 0);
+        Vector3 dir = new Vector3(distance.x, distance.y, -distance.z);
+        Quaternion rotation = Quaternion.Euler(vertical, horizontal, 0);
 
-		if (Input.GetButton("Fire2"))
-		{
-			transform.rotation = rotation;
-			transform.position = Target.position + rotation * offset;
+        if (Input.GetButton("Fire2"))
+        {
+            transform.rotation = rotation;
+            transform.position = Target.position + rotation * offset;
             //Camera.main.transform.localRotation = Quaternion.Euler(vertical, 0, 0);
-			
-		}
-		else
-		{
-			transform.rotation = rotation;
-			transform.position = Target.position + rotation * dir;
-		}
 
-	}
-
+        }
+        else
+        {
+            transform.rotation = rotation;
+            transform.position = Target.position + rotation * dir;
+        }
+    }
 }
