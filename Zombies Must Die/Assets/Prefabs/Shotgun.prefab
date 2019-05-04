@@ -222,7 +222,9 @@ MonoBehaviour:
   pellets: 6
   range: 30
   impact: {fileID: 5112726415786509088, guid: a978861ceb825174c9bea861b99725c4, type: 3}
-  spread: 0.3
+  maximumSpread: 0.3
+  fireTimer: 0
+  fireRate: 1
 --- !u!1 &8746417093118820595
 GameObject:
   m_ObjectHideFlags: 0
