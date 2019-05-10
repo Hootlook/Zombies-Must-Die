@@ -11,19 +11,20 @@ public class Menu : PlayerBehavior
     CameraController cc;
     bool menuState;
 
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
+		PlayerSetup.PlayerLoaded += playerInstantiated;
+		gameObject.SetActive(false);
     }
 
-    protected override void NetworkStart()
-    {
-        base.NetworkStart();
-        pm = GameObject.FindWithTag("Player").GetComponent<PlayerMovements>();
-        cc = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
-    }
+	private void playerInstantiated()
+	{
+		pm = GameObject.FindWithTag("Player").GetComponent<PlayerMovements>();
+		cc = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
+	}
 
     private void Update()
     {
@@ -31,6 +32,16 @@ public class Menu : PlayerBehavior
 
         menu.SetActive(menuState);
 
+		if (menu.activeSelf == true)
+		{
+			Cursor.lockState = CursorLockMode.Confined;
+			Cursor.visible = true;
+		}
+		else
+		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+		}
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)

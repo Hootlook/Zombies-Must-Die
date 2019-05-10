@@ -22,9 +22,9 @@ public class PlayerMovements : PlayerBehavior
 	public float gravity = 20;
 	private float speed;
 
-    private void Start()
-    {
-        cc = GetComponent<CharacterController>();
+	private void Start()
+	{
+		cc = GetComponent<CharacterController>();
         i = GetComponent<Inputs>();
     }
 

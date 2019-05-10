@@ -1,7 +1,7 @@
 ﻿using BeardedManStudios.Forge.Networking.Generated;
 using UnityEngine;
 
-public class PlayerNetworkSetup : PlayerBehavior
+public class PlayerSetup : PlayerBehavior
 {
     public GameObject camera;
     public bool isGrounded;
@@ -9,8 +9,16 @@ public class PlayerNetworkSetup : PlayerBehavior
     PlayerMovements pm;
     CharacterController cc;
     CameraController cameraController;
+	public delegate void playerInstance();
+	public static event playerInstance PlayerLoaded;
 
-    protected override void NetworkStart()
+
+	private void Start()
+	{
+		PlayerLoaded();
+	}
+
+	protected override void NetworkStart()
     {
         base.NetworkStart();
 

@@ -6,7 +6,7 @@ public class PlayerAnimations : PlayerBehavior
     Animator a;
 	CharacterController cc;
     CameraController cameraController;
-    PlayerNetworkSetup pns;
+    PlayerSetup pns;
     Inputs i;
 
     private void Start()
@@ -14,7 +14,7 @@ public class PlayerAnimations : PlayerBehavior
         a = GetComponent<Animator>();
 		cc = GetComponent<CharacterController>();
         i = GetComponent<Inputs>();
-        pns = GetComponent<PlayerNetworkSetup>();
+        pns = GetComponent<PlayerSetup>();
     }
      
     void Update()

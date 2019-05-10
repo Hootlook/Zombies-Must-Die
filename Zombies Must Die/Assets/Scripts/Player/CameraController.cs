@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class CameraController : PlayerBehavior {
 
-	[Range(1, 20)]
+	[Range(0.1f, 20)]
 	public float rotationSpeedY = 1;
-	[Range(1, 20)]
+	[Range(0.1f, 20)]
 	public float rotationSpeedX = 1;
 
 	public Vector3 distance = new Vector3(0, 1, -5);
@@ -23,9 +23,6 @@ public class CameraController : PlayerBehavior {
         base.NetworkStart();
 
         i = GameObject.FindGameObjectWithTag("Player").GetComponent<Inputs>();
-        
-        Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
 	}
 
 	void Update () {
