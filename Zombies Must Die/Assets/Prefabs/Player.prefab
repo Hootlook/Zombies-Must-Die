@@ -977,6 +977,7 @@ MonoBehaviour:
   isShooting: 0
   vertical: 0
   horizontal: 0
+  mouseY: 0
 --- !u!114 &1539510226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,7 +990,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ba83b3e7c16c4e4ea7e71645c857573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 2630160453175328986, guid: ef2bf0f044e872b41945d968480d2fa1, type: 3}
+  cam: {fileID: 2630160453175328986, guid: ef2bf0f044e872b41945d968480d2fa1, type: 3}
+  isGrounded: 0
+  vertical: 0
 --- !u!1 &2065210390144529714
 GameObject:
   m_ObjectHideFlags: 0

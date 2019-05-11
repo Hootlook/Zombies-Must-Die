@@ -6,9 +6,12 @@ using UnityEngine;
 
 public class GameManager : PlayerBehavior
 {
+	public GameObject menu;
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
+		Instantiate(menu);
     }
 
     protected override void NetworkStart()

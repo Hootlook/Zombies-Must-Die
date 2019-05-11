@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerSetup : PlayerBehavior
 {
-    public GameObject camera;
+    public GameObject cam;
     public bool isGrounded;
     public float vertical;
     PlayerMovements pm;
@@ -12,12 +12,6 @@ public class PlayerSetup : PlayerBehavior
 	public delegate void playerInstance();
 	public static event playerInstance PlayerLoaded;
 
-
-	private void Start()
-	{
-		PlayerLoaded();
-	}
-
 	protected override void NetworkStart()
     {
         base.NetworkStart();
@@ -25,12 +19,13 @@ public class PlayerSetup : PlayerBehavior
         if (networkObject.IsOwner)
         {
             gameObject.tag = "Player";
-            Instantiate(camera);
+            Instantiate(cam);
         }
         cc = GetComponent<CharacterController>();
         pm = GetComponent<PlayerMovements>();
 
-    }
+		PlayerLoaded();
+	}
    
     void Update()
     {

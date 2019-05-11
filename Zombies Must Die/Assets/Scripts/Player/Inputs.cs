@@ -10,7 +10,17 @@ public class Inputs : PlayerBehavior
     public float horizontal;
     public float mouseY;
 
-    private void Update()
+	private void OnDisable()
+	{
+		horizontal = 0;
+		vertical = 0;
+		mouseY = 0;
+		isJumping = false;
+		isShooting = false;
+		isAiming = false;
+	}
+
+	private void Update()
     {
         if (networkObject == null) return;
 

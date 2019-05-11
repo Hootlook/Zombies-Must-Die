@@ -7,7 +7,7 @@ public class Menu : PlayerBehavior
 {
     [SerializeField]
     GameObject menu;
-    PlayerMovements pm;
+    Inputs i;
     CameraController cc;
     bool menuState;
 
@@ -22,7 +22,7 @@ public class Menu : PlayerBehavior
 
 	private void playerInstantiated()
 	{
-		pm = GameObject.FindWithTag("Player").GetComponent<PlayerMovements>();
+		i = GameObject.FindWithTag("Player").GetComponent<Inputs>();
 		cc = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
 	}
 
@@ -36,11 +36,15 @@ public class Menu : PlayerBehavior
 		{
 			Cursor.lockState = CursorLockMode.Confined;
 			Cursor.visible = true;
+			i.enabled = false;
+			cc.enabled = false;
 		}
 		else
 		{
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
+			i.enabled = true;
+			cc.enabled = true;
 		}
     }
 
