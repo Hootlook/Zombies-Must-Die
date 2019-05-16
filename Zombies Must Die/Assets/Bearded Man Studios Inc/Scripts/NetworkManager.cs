@@ -370,6 +370,8 @@ namespace BeardedManStudios.Forge.Networking.Unity
 				for (int i = 0; i < Networker.NetworkObjectList.Count; i++)
 					Networker.NetworkObjectList[i].InterpolateUpdate();
 			}
+			Debug.Log("IN: " +Networker.BandwidthIn);
+			Debug.Log("OUT: " + Networker.BandwidthOut);
 		}
 
 		protected virtual void ProcessOthers(Transform obj, NetworkObject createTarget, ref uint idOffset, NetworkBehavior netBehavior = null)
@@ -666,6 +668,9 @@ namespace BeardedManStudios.Forge.Networking.Unity
 					behavior.Initialize(Networker);
 
 			}
+
+			NetworkManager.Instance.InstantiatePlayer();
+
 		}
 	}
 }

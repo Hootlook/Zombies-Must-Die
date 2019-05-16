@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.2,0.2,0.2,0.2,0.2,0.2,0,0,0,0]")]
+	[GeneratedInterpol("{\"inter\":[0.2,0.2,0.2,0.2,0.2,0.2,0,0,0,0,0]")]
 	public partial class PlayerNetworkObject : NetworkObject
 	{
 		public const int IDENTITY = 2;
@@ -325,6 +325,37 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (isGroundedChanged != null) isGroundedChanged(_isGrounded, timestep);
 			if (fieldAltered != null) fieldAltered("isGrounded", _isGrounded, timestep);
 		}
+		[ForgeGeneratedField]
+		private uint _ownerNetId;
+		public event FieldEvent<uint> ownerNetIdChanged;
+		public Interpolated<uint> ownerNetIdInterpolation = new Interpolated<uint>() { LerpT = 0f, Enabled = false };
+		public uint ownerNetId
+		{
+			get { return _ownerNetId; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_ownerNetId == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[1] |= 0x4;
+				_ownerNetId = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetownerNetIdDirty()
+		{
+			_dirtyFields[1] |= 0x4;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_ownerNetId(ulong timestep)
+		{
+			if (ownerNetIdChanged != null) ownerNetIdChanged(_ownerNetId, timestep);
+			if (fieldAltered != null) fieldAltered("ownerNetId", _ownerNetId, timestep);
+		}
 
 		protected override void OwnershipChanged()
 		{
@@ -344,6 +375,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			isAimingInterpolation.current = isAimingInterpolation.target;
 			isJumpingInterpolation.current = isJumpingInterpolation.target;
 			isGroundedInterpolation.current = isGroundedInterpolation.target;
+			ownerNetIdInterpolation.current = ownerNetIdInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -360,6 +392,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _isAiming);
 			UnityObjectMapper.Instance.MapBytes(data, _isJumping);
 			UnityObjectMapper.Instance.MapBytes(data, _isGrounded);
+			UnityObjectMapper.Instance.MapBytes(data, _ownerNetId);
 
 			return data;
 		}
@@ -406,6 +439,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			isGroundedInterpolation.current = _isGrounded;
 			isGroundedInterpolation.target = _isGrounded;
 			RunChange_isGrounded(timestep);
+			_ownerNetId = UnityObjectMapper.Instance.Map<uint>(payload);
+			ownerNetIdInterpolation.current = _ownerNetId;
+			ownerNetIdInterpolation.target = _ownerNetId;
+			RunChange_ownerNetId(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -433,6 +470,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isJumping);
 			if ((0x2 & _dirtyFields[1]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isGrounded);
+			if ((0x4 & _dirtyFields[1]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _ownerNetId);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -579,6 +618,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_isGrounded(timestep);
 				}
 			}
+			if ((0x4 & readDirtyFlags[1]) != 0)
+			{
+				if (ownerNetIdInterpolation.Enabled)
+				{
+					ownerNetIdInterpolation.target = UnityObjectMapper.Instance.Map<uint>(data);
+					ownerNetIdInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_ownerNetId = UnityObjectMapper.Instance.Map<uint>(data);
+					RunChange_ownerNetId(timestep);
+				}
+			}
 		}
 
 		public override void InterpolateUpdate()
@@ -635,6 +687,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_isGrounded = (bool)isGroundedInterpolation.Interpolate();
 				//RunChange_isGrounded(isGroundedInterpolation.Timestep);
+			}
+			if (ownerNetIdInterpolation.Enabled && !ownerNetIdInterpolation.current.UnityNear(ownerNetIdInterpolation.target, 0.0015f))
+			{
+				_ownerNetId = (uint)ownerNetIdInterpolation.Interpolate();
+				//RunChange_ownerNetId(ownerNetIdInterpolation.Timestep);
 			}
 		}
 

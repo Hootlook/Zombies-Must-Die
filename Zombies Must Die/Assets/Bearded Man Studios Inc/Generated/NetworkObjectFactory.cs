@@ -35,6 +35,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new weaponsNetworkObject(networker, id, frame);
 						break;
+					case GameManagerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new GameManagerNetworkObject(networker, id, frame);
+						break;
 				}
 
 				if (!availableCallback)

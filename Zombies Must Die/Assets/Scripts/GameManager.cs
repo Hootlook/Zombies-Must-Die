@@ -4,19 +4,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : PlayerBehavior
+public class GameManager : MonoBehaviour
 {
 	public GameObject menu;
+	private static GameManager _instance;
 
-    private void Start()
+	private void Awake()
+	{
+		if(_instance == null)
+		{
+			_instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else if(_instance != this)
+		{
+			Destroy(gameObject);
+			return;
+		}
+	}
+
+	private void Start()
     {
-        DontDestroyOnLoad(gameObject);
 		Instantiate(menu);
     }
 
-    protected override void NetworkStart()
-    {
-        base.NetworkStart();
-        NetworkManager.Instance.InstantiatePlayer();
-    }
 }
