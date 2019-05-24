@@ -370,11 +370,15 @@ namespace BeardedManStudios.Forge.Networking.Unity
 				for (int i = 0; i < Networker.NetworkObjectList.Count; i++)
 					Networker.NetworkObjectList[i].InterpolateUpdate();
 			}
-			Debug.Log("IN: " +Networker.BandwidthIn);
-			Debug.Log("OUT: " + Networker.BandwidthOut);
 		}
 
-		protected virtual void ProcessOthers(Transform obj, NetworkObject createTarget, ref uint idOffset, NetworkBehavior netBehavior = null)
+        void OnGUI()
+        {
+            GUI.Label(new Rect(10, 10, 100, 20), "IN: " + Networker.BandwidthIn);
+            GUI.Label(new Rect(10, 25, 100, 20), "OUT: " + Networker.BandwidthOut);
+        }
+
+        protected virtual void ProcessOthers(Transform obj, NetworkObject createTarget, ref uint idOffset, NetworkBehavior netBehavior = null)
 		{
 			int i;
 

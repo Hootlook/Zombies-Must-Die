@@ -23,15 +23,15 @@ public class PlayerSetup : PlayerBehavior
         }
         cc = GetComponent<CharacterController>();
         pm = GetComponent<PlayerMovements>();
+        cameraController = GameObject.Find("Camera(Clone)").GetComponent<CameraController>();
 
-		PlayerLoaded();
+        PlayerLoaded();
 	}
    
     void Update()
     {
         if (networkObject != null)
         {
-            cameraController = GameObject.Find("Camera(Clone)").GetComponent<CameraController>();
             if (networkObject.IsOwner)
             {
                 networkObject.position = transform.position;
