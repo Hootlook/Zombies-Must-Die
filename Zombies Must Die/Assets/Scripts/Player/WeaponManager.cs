@@ -6,9 +6,9 @@ using UnityEngine;
 public class WeaponManager : PlayerBehavior
 {
 	public int selectedWeapon = 0;
-	[SerializeField]
-	Transform weaponBone;
+	public Transform weaponBone;
 	GameObject grip;
+    PlayerSetup ps;
 	Animator a;
 	public Vector3 handOffset;
 
@@ -17,35 +17,47 @@ public class WeaponManager : PlayerBehavior
         base.NetworkStart();
 
         a = GetComponent<Animator>();
-		SelectWeapon();
+        ps = GetComponent<PlayerSetup>();
+		SelectWeapon(selectedWeapon);
 	}
 
 	void Update()
 	{
         if (networkObject == null) return;
 
-        int previousSelectedWeapon = selectedWeapon;
+        if (networkObject.IsOwner)
+        {
+            int previousSelectedWeapon = selectedWeapon;
 
-		if (Input.GetAxis("Mouse ScrollWheel") > 0f)
-		{
-			if (selectedWeapon >= weaponBone.childCount - 1) selectedWeapon = 0;
-			else selectedWeapon++;
-		}
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+            {
+                if (selectedWeapon >= weaponBone.childCount - 1) selectedWeapon = 0;
+                else selectedWeapon++;
+            }
 
-		if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-		{
-			if (selectedWeapon <= 0) selectedWeapon = weaponBone.childCount - 1;
-			else selectedWeapon--;
-		}
+            if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+            {
+                if (selectedWeapon <= 0) selectedWeapon = weaponBone.childCount - 1;
+                else selectedWeapon--;
+            }
 
-		if (previousSelectedWeapon != selectedWeapon)
-		{
-			SelectWeapon();
-		}
+            if (previousSelectedWeapon != selectedWeapon)
+            {
+                SelectWeapon(selectedWeapon);
+            }
 
-	}
 
-	void SelectWeapon()
+        }
+        else
+        {
+            selectedWeapon = ps.selectedWeapon;
+            SelectWeapon(ps.selectedWeapon);
+        }
+
+        a.SetInteger("selectedWeapon", selectedWeapon);
+    }
+
+	void SelectWeapon(int selectedWeapon)
 	{
 		int i = 0;
 		foreach (Transform weapon in weaponBone)

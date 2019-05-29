@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.2,0.2,0.2,0.2,0.2,0.2,0,0,0,0,0]")]
+	[GeneratedInterpol("{\"inter\":[0.2,0.2,0.2,0.2,0.2,0.2,0,0,0,0,0,0,0]")]
 	public partial class PlayerNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 2;
+		public const int IDENTITY = 4;
 
 		private byte[] _dirtyFields = new byte[2];
 
@@ -356,6 +356,68 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (ownerNetIdChanged != null) ownerNetIdChanged(_ownerNetId, timestep);
 			if (fieldAltered != null) fieldAltered("ownerNetId", _ownerNetId, timestep);
 		}
+		[ForgeGeneratedField]
+		private Vector3 _cameraAxis;
+		public event FieldEvent<Vector3> cameraAxisChanged;
+		public InterpolateVector3 cameraAxisInterpolation = new InterpolateVector3() { LerpT = 0f, Enabled = false };
+		public Vector3 cameraAxis
+		{
+			get { return _cameraAxis; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_cameraAxis == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[1] |= 0x8;
+				_cameraAxis = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetcameraAxisDirty()
+		{
+			_dirtyFields[1] |= 0x8;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_cameraAxis(ulong timestep)
+		{
+			if (cameraAxisChanged != null) cameraAxisChanged(_cameraAxis, timestep);
+			if (fieldAltered != null) fieldAltered("cameraAxis", _cameraAxis, timestep);
+		}
+		[ForgeGeneratedField]
+		private int _selectedWeapon;
+		public event FieldEvent<int> selectedWeaponChanged;
+		public Interpolated<int> selectedWeaponInterpolation = new Interpolated<int>() { LerpT = 0f, Enabled = false };
+		public int selectedWeapon
+		{
+			get { return _selectedWeapon; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_selectedWeapon == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[1] |= 0x10;
+				_selectedWeapon = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetselectedWeaponDirty()
+		{
+			_dirtyFields[1] |= 0x10;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_selectedWeapon(ulong timestep)
+		{
+			if (selectedWeaponChanged != null) selectedWeaponChanged(_selectedWeapon, timestep);
+			if (fieldAltered != null) fieldAltered("selectedWeapon", _selectedWeapon, timestep);
+		}
 
 		protected override void OwnershipChanged()
 		{
@@ -376,6 +438,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			isJumpingInterpolation.current = isJumpingInterpolation.target;
 			isGroundedInterpolation.current = isGroundedInterpolation.target;
 			ownerNetIdInterpolation.current = ownerNetIdInterpolation.target;
+			cameraAxisInterpolation.current = cameraAxisInterpolation.target;
+			selectedWeaponInterpolation.current = selectedWeaponInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -393,6 +457,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _isJumping);
 			UnityObjectMapper.Instance.MapBytes(data, _isGrounded);
 			UnityObjectMapper.Instance.MapBytes(data, _ownerNetId);
+			UnityObjectMapper.Instance.MapBytes(data, _cameraAxis);
+			UnityObjectMapper.Instance.MapBytes(data, _selectedWeapon);
 
 			return data;
 		}
@@ -443,6 +509,14 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			ownerNetIdInterpolation.current = _ownerNetId;
 			ownerNetIdInterpolation.target = _ownerNetId;
 			RunChange_ownerNetId(timestep);
+			_cameraAxis = UnityObjectMapper.Instance.Map<Vector3>(payload);
+			cameraAxisInterpolation.current = _cameraAxis;
+			cameraAxisInterpolation.target = _cameraAxis;
+			RunChange_cameraAxis(timestep);
+			_selectedWeapon = UnityObjectMapper.Instance.Map<int>(payload);
+			selectedWeaponInterpolation.current = _selectedWeapon;
+			selectedWeaponInterpolation.target = _selectedWeapon;
+			RunChange_selectedWeapon(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -472,6 +546,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isGrounded);
 			if ((0x4 & _dirtyFields[1]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _ownerNetId);
+			if ((0x8 & _dirtyFields[1]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _cameraAxis);
+			if ((0x10 & _dirtyFields[1]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _selectedWeapon);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -631,6 +709,32 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_ownerNetId(timestep);
 				}
 			}
+			if ((0x8 & readDirtyFlags[1]) != 0)
+			{
+				if (cameraAxisInterpolation.Enabled)
+				{
+					cameraAxisInterpolation.target = UnityObjectMapper.Instance.Map<Vector3>(data);
+					cameraAxisInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_cameraAxis = UnityObjectMapper.Instance.Map<Vector3>(data);
+					RunChange_cameraAxis(timestep);
+				}
+			}
+			if ((0x10 & readDirtyFlags[1]) != 0)
+			{
+				if (selectedWeaponInterpolation.Enabled)
+				{
+					selectedWeaponInterpolation.target = UnityObjectMapper.Instance.Map<int>(data);
+					selectedWeaponInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_selectedWeapon = UnityObjectMapper.Instance.Map<int>(data);
+					RunChange_selectedWeapon(timestep);
+				}
+			}
 		}
 
 		public override void InterpolateUpdate()
@@ -692,6 +796,16 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_ownerNetId = (uint)ownerNetIdInterpolation.Interpolate();
 				//RunChange_ownerNetId(ownerNetIdInterpolation.Timestep);
+			}
+			if (cameraAxisInterpolation.Enabled && !cameraAxisInterpolation.current.UnityNear(cameraAxisInterpolation.target, 0.0015f))
+			{
+				_cameraAxis = (Vector3)cameraAxisInterpolation.Interpolate();
+				//RunChange_cameraAxis(cameraAxisInterpolation.Timestep);
+			}
+			if (selectedWeaponInterpolation.Enabled && !selectedWeaponInterpolation.current.UnityNear(selectedWeaponInterpolation.target, 0.0015f))
+			{
+				_selectedWeapon = (int)selectedWeaponInterpolation.Interpolate();
+				//RunChange_selectedWeapon(selectedWeaponInterpolation.Timestep);
 			}
 		}
 

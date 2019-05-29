@@ -27,6 +27,14 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new ChatManagerNetworkObject(networker, id, frame);
 						break;
+					case GameManagerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new GameManagerNetworkObject(networker, id, frame);
+						break;
+					case GrenadeNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new GrenadeNetworkObject(networker, id, frame);
+						break;
 					case PlayerNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new PlayerNetworkObject(networker, id, frame);
@@ -34,10 +42,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					case weaponsNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new weaponsNetworkObject(networker, id, frame);
-						break;
-					case GameManagerNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new GameManagerNetworkObject(networker, id, frame);
 						break;
 				}
 

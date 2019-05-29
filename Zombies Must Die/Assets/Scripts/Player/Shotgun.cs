@@ -13,13 +13,18 @@ public class Shotgun : weaponsBehavior
 	public float maximumSpread = 0.3f;
     public float fireTimer;
     public float fireRate;
+    PlayerSetup ps;
     Inputs i;
+    AudioSource audio;
+    private Vector3 camForward;
 
     protected override void NetworkStart()
     {
         base.NetworkStart();
 
         i = GetComponentInParent<Inputs>();
+        ps = GetComponentInParent<PlayerSetup>();
+        audio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -29,6 +34,8 @@ public class Shotgun : weaponsBehavior
         if (fireTimer < fireRate) fireTimer += Time.fixedDeltaTime;
 
         RaycastHit hit;
+
+        camForward = networkObject.IsOwner ? ps.networkObject.cameraAxis : ps.camAxis;
 
 		if (i.isShooting)
 		{
@@ -42,16 +49,18 @@ public class Shotgun : weaponsBehavior
 				float spreadZ = 0f; //Don't adjust depth of spread.
 
                 Vector3 spread = transform.TransformDirection(new Vector3(spreadX, spreadY, spreadZ));
-				Vector3 direction = (transform.forward + spread).normalized;
+				Vector3 direction = (camForward + spread).normalized;
 
 
                 //Vector3 direction = Random.insideUnitCircle * spread;  THE OLD WAY
-                if (Physics.Raycast(transform.position, transform.forward + direction, out hit, range))
+                if (Physics.Raycast(transform.position, camForward + direction, out hit, range))
 				{
 					Debug.Log(hit.transform.name);
 					Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
 				}                
 			}
+
+            audio.Play();
 
             fireTimer = 0;
         }

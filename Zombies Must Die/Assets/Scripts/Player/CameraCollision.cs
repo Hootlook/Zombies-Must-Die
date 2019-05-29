@@ -34,6 +34,7 @@ public class CameraCollision : MonoBehaviour
 		{
 			distance = maxDistance;
 		}
+        Debug.DrawLine(transform.parent.position, desiredCameraPos, Color.red);
 
 		transform.localPosition = Vector3.Lerp(transform.localPosition, dollyDir * distance, Time.deltaTime * smooth);
 	}
