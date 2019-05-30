@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.2,0.2]")]
+	[GeneratedInterpol("{\"inter\":[0.2,0.2,0]")]
 	public partial class GrenadeNetworkObject : NetworkObject
 	{
 		public const int IDENTITY = 6;
@@ -77,6 +77,37 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (rotationChanged != null) rotationChanged(_rotation, timestep);
 			if (fieldAltered != null) fieldAltered("rotation", _rotation, timestep);
 		}
+		[ForgeGeneratedField]
+		private bool _isArmed;
+		public event FieldEvent<bool> isArmedChanged;
+		public Interpolated<bool> isArmedInterpolation = new Interpolated<bool>() { LerpT = 0f, Enabled = false };
+		public bool isArmed
+		{
+			get { return _isArmed; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_isArmed == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[0] |= 0x4;
+				_isArmed = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetisArmedDirty()
+		{
+			_dirtyFields[0] |= 0x4;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_isArmed(ulong timestep)
+		{
+			if (isArmedChanged != null) isArmedChanged(_isArmed, timestep);
+			if (fieldAltered != null) fieldAltered("isArmed", _isArmed, timestep);
+		}
 
 		protected override void OwnershipChanged()
 		{
@@ -88,6 +119,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		{
 			positionInterpolation.current = positionInterpolation.target;
 			rotationInterpolation.current = rotationInterpolation.target;
+			isArmedInterpolation.current = isArmedInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -96,6 +128,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		{
 			UnityObjectMapper.Instance.MapBytes(data, _position);
 			UnityObjectMapper.Instance.MapBytes(data, _rotation);
+			UnityObjectMapper.Instance.MapBytes(data, _isArmed);
 
 			return data;
 		}
@@ -110,6 +143,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			rotationInterpolation.current = _rotation;
 			rotationInterpolation.target = _rotation;
 			RunChange_rotation(timestep);
+			_isArmed = UnityObjectMapper.Instance.Map<bool>(payload);
+			isArmedInterpolation.current = _isArmed;
+			isArmedInterpolation.target = _isArmed;
+			RunChange_isArmed(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -121,6 +158,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _position);
 			if ((0x2 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _rotation);
+			if ((0x4 & _dirtyFields[0]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isArmed);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -163,6 +202,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_rotation(timestep);
 				}
 			}
+			if ((0x4 & readDirtyFlags[0]) != 0)
+			{
+				if (isArmedInterpolation.Enabled)
+				{
+					isArmedInterpolation.target = UnityObjectMapper.Instance.Map<bool>(data);
+					isArmedInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_isArmed = UnityObjectMapper.Instance.Map<bool>(data);
+					RunChange_isArmed(timestep);
+				}
+			}
 		}
 
 		public override void InterpolateUpdate()
@@ -179,6 +231,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_rotation = (Quaternion)rotationInterpolation.Interpolate();
 				//RunChange_rotation(rotationInterpolation.Timestep);
+			}
+			if (isArmedInterpolation.Enabled && !isArmedInterpolation.current.UnityNear(isArmedInterpolation.target, 0.0015f))
+			{
+				_isArmed = (bool)isArmedInterpolation.Interpolate();
+				//RunChange_isArmed(isArmedInterpolation.Timestep);
 			}
 		}
 

@@ -65,6 +65,6 @@ public class PlayerAnimations : PlayerBehavior
             g.GetComponent<Rigidbody>().AddTorque(t.up * 500);
         }
 
-        pa.PlaySound("Throwing");
+        AudioUtils.PlaySound("Throwing", pa.clipList, pa.a);
     } 
 }

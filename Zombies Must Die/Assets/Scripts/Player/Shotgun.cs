@@ -18,6 +18,7 @@ public class Shotgun : weaponsBehavior
     AudioSource audio;
     private Vector3 camForward;
 
+
     protected override void NetworkStart()
     {
         base.NetworkStart();
@@ -57,7 +58,8 @@ public class Shotgun : weaponsBehavior
 				{
 					Debug.Log(hit.transform.name);
 					Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
-				}                
+				}
+                EZCameraShake.CameraShaker.Instance.ShakeOnce(1, 5, 0, 1);
 			}
 
             audio.Play();

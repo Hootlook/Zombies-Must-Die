@@ -16,7 +16,7 @@ public class CameraCollision : MonoBehaviour
 	{
 		dollyDir = transform.localPosition.normalized;
 		distance = transform.localPosition.magnitude;
-		layerMask = 1 << 9;
+		layerMask = 1 << 2;
 		layerMask = ~layerMask;
 	}
 

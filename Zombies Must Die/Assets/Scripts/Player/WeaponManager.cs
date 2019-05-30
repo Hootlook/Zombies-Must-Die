@@ -45,8 +45,6 @@ public class WeaponManager : PlayerBehavior
             {
                 SelectWeapon(selectedWeapon);
             }
-
-
         }
         else
         {

@@ -7,12 +7,12 @@ public class Grenade : GrenadeBehavior
 {
     Rigidbody rb;
     AudioSource a;
-    public float counter = 0;
-    public float timer = 1;
 
     protected override void NetworkStart()
     {
         base.NetworkStart();
+
+        if (this == !enabled) return;
 
         gameObject.name = "Grenade";
         a = GetComponent<AudioSource>();
@@ -24,13 +24,19 @@ public class Grenade : GrenadeBehavior
         networkObject.rotationInterpolation.target = transform.rotation;
         networkObject.SnapInterpolations();
 
-        if (transform.parent == null)
-        {
-            a.Play();
-            networkObject.Destroy(5000);
-        }
+        a.Play();
+
+        if(networkObject.IsOwner)
+        networkObject.Destroy(5000);
+
+        FxManager.EmitSound("grenade_explosion", 5, transform, 1, 10);
+        FxManager.EmitParticle("WFX_Explosion", 5, transform);
     }
 
+    private void OnDestroy()
+    {
+        //if(transform.GetComponent<CapsuleCollider>().isTrigger)
+    }
     void Update()
     {
         if (networkObject.IsOwner)
