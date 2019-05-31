@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeedY: 1
   rotationSpeedX: 1
-  distance: {x: 0, y: 2, z: 0}
-  offset: {x: 0.75, y: 1.5, z: 2.5}
+  distance: {x: 0, y: 1.1, z: 0}
+  offset: {x: 0.75, y: 0.8, z: 2.5}
   Target: {fileID: 0}
   horizontal: 0
   vertical: 0

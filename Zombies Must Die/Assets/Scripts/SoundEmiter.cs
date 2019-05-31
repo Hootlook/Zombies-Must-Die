@@ -6,6 +6,7 @@ public class SoundEmiter : MonoBehaviour
 {
     AudioSource a;
     public Transform target;
+    private bool onetime = false;
 
     void Start()
     {
@@ -14,9 +15,21 @@ public class SoundEmiter : MonoBehaviour
 
     void Update()
     {
-        if (!a.isPlaying) Destroy(gameObject);
+        if (a.clip == null) return;
 
-        if (target == null) return;
-        transform.position = target.position;
+        if(target == null)
+        {
+            if (!onetime)
+            {
+                a.Play();
+                onetime = true;
+            }
+
+            if (!a.isPlaying) Destroy(gameObject);
+        }
+        else
+        {
+            transform.position = target.position;
+        }
     }
 }

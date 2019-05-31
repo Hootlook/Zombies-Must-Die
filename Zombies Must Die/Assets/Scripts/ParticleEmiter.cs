@@ -16,13 +16,9 @@ public class ParticleEmiter : MonoBehaviour
 
     void Update()
     {
-        if (counter <= timer) counter += Time.deltaTime;
+        if(target == null) transform.GetChild(0).gameObject.SetActive(true);
+        else transform.position = target.position;
 
-        if (counter >= timer) transform.GetChild(0).gameObject.SetActive(true);
-
-        if (!p.isPlaying && counter >= timer) Destroy(gameObject);
-
-        if (target == null) return;
-        transform.position = target.position;
+        if (!p.isPlaying && target == null) Destroy(gameObject);
     }
 }

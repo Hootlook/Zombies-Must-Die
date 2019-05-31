@@ -7,16 +7,23 @@ public class Grenade : GrenadeBehavior
 {
     Rigidbody rb;
     AudioSource a;
+    SphereCollider sc;
+    public float explosionRadius = 12;
+    private int layerMask = 1 << 11;
+    public float proximity = 50;
 
     protected override void NetworkStart()
     {
         base.NetworkStart();
+
+        layerMask = ~layerMask;
 
         if (this == !enabled) return;
 
         gameObject.name = "Grenade";
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
+        sc = GetComponent<SphereCollider>();
 
         networkObject.position = transform.position;
         networkObject.rotation = transform.rotation;
@@ -29,14 +36,10 @@ public class Grenade : GrenadeBehavior
         if(networkObject.IsOwner)
         networkObject.Destroy(5000);
 
-        FxManager.EmitSound("grenade_explosion", 5, transform, 1, 10);
-        FxManager.EmitParticle("WFX_Explosion", 5, transform);
+        FxManager.EmitParticleOnDestroy("WFX_Explosion", transform);
+        FxManager.EmitSoundOnDestroy("grenade_explosion", transform);
     }
 
-    private void OnDestroy()
-    {
-        //if(transform.GetComponent<CapsuleCollider>().isTrigger)
-    }
     void Update()
     {
         if (networkObject.IsOwner)
@@ -48,6 +51,24 @@ public class Grenade : GrenadeBehavior
         {
             transform.position = networkObject.position;
             transform.rotation = networkObject.rotation;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Collider[] objectsInRange = Physics.OverlapSphere(transform.position, explosionRadius, layerMask);
+        foreach (Collider col in objectsInRange)
+        {
+            if (Physics.Raycast(transform.position, (col.transform.position - transform.position), out RaycastHit hit, explosionRadius, layerMask))
+            {
+                if (hit.collider.tag == "Player")
+                {
+                    float distance = Vector3.Distance(hit.collider.transform.position, transform.position);
+                    proximity /= distance;
+
+                    EZCameraShake.CameraShaker.Instance.ShakeOnce(5, proximity, 0, 1);
+                }
+            }
         }
     }
 }

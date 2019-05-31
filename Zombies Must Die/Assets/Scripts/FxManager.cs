@@ -24,13 +24,14 @@ public class FxManager : MonoBehaviour
         }
     }
     
-    public static void EmitSound(string clipName, float delay = 0, Transform followTarget = null, float spacialBlend = 1, float minDistance = 1)
+    public static void EmitSoundOnDestroy(string clipName, Transform followTarget = null, float spacialBlend = 1, float minDistance = 1)
     {
-        GameObject emiter = new GameObject("AudioEmiter", typeof(AudioSource), typeof(SoundEmiter));
+        GameObject emiter = new GameObject("AudioEmiter", typeof(SoundEmiter), typeof(AudioSource));
         AudioSource emitersAudioSource = emiter.GetComponent<AudioSource>();
 
-        if (followTarget != null) emiter.GetComponent<SoundEmiter>().target = followTarget;
+        emiter.GetComponent<SoundEmiter>().target = followTarget;
 
+        emitersAudioSource.playOnAwake = false;
         emitersAudioSource.spatialBlend = spacialBlend;
         emitersAudioSource.minDistance = minDistance;
 
@@ -39,22 +40,16 @@ public class FxManager : MonoBehaviour
             if (c.name == clipName)
             {
                 emitersAudioSource.clip = c;
-                if (delay == 0)
-                    emitersAudioSource.Play();
-                else
-                    emitersAudioSource.PlayDelayed(delay);
             }
         }
     }
 
-    public static void EmitParticle(string particleObjectName, float delay = 0, Transform followTarget = null)
+    public static void EmitParticleOnDestroy(string particleObjectName, Transform followTarget = null)
     {
         GameObject emiter = new GameObject("ParticleEmiter", typeof(ParticleEmiter));
         ParticleEmiter emitersParticleEmiter = emiter.GetComponent<ParticleEmiter>();
 
-        if (followTarget != null) emitersParticleEmiter.target = followTarget;
-
-        emitersParticleEmiter.timer = delay;
+        emitersParticleEmiter.target = followTarget;
 
         foreach (GameObject g in _instance.particlesObjects)
         {
@@ -64,5 +59,4 @@ public class FxManager : MonoBehaviour
             }
         }
     }
-
 }
