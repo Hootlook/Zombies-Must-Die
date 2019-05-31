@@ -8,14 +8,13 @@ public class Shotgun : weaponsBehavior
 {
 	public int pellets = 6;
 	public float range = 30;
-	[SerializeField]
-	GameObject impact;
+	public GameObject impact;
 	public float maximumSpread = 0.3f;
     public float fireTimer;
     public float fireRate;
     PlayerSetup ps;
     Inputs i;
-    AudioSource audio;
+    AudioSource a;
     private Vector3 camForward;
 
 
@@ -25,7 +24,7 @@ public class Shotgun : weaponsBehavior
 
         i = GetComponentInParent<Inputs>();
         ps = GetComponentInParent<PlayerSetup>();
-        audio = GetComponent<AudioSource>();
+        a = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -52,17 +51,16 @@ public class Shotgun : weaponsBehavior
                 Vector3 spread = transform.TransformDirection(new Vector3(spreadX, spreadY, spreadZ));
 				Vector3 direction = (camForward + spread).normalized;
 
-
-                //Vector3 direction = Random.insideUnitCircle * spread;  THE OLD WAY
                 if (Physics.Raycast(transform.position, camForward + direction, out hit, range))
 				{
-					Debug.Log(hit.transform.name);
 					Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
 				}
+
+                if(networkObject.IsOwner)
                 EZCameraShake.CameraShaker.Instance.ShakeOnce(1, 5, 0, 1);
 			}
 
-            audio.Play();
+            a.Play();
 
             fireTimer = 0;
         }

@@ -24,7 +24,7 @@ public class FxManager : MonoBehaviour
         }
     }
     
-    public static void EmitSoundOnDestroy(string clipName, Transform followTarget = null, float spacialBlend = 1, float minDistance = 1)
+    public static void EmitSoundOnDestroy(string clipName, Transform followTarget = null, float minDistance = 1)
     {
         GameObject emiter = new GameObject("AudioEmiter", typeof(SoundEmiter), typeof(AudioSource));
         AudioSource emitersAudioSource = emiter.GetComponent<AudioSource>();
@@ -32,7 +32,7 @@ public class FxManager : MonoBehaviour
         emiter.GetComponent<SoundEmiter>().target = followTarget;
 
         emitersAudioSource.playOnAwake = false;
-        emitersAudioSource.spatialBlend = spacialBlend;
+        emitersAudioSource.spatialBlend = 1;
         emitersAudioSource.minDistance = minDistance;
 
         foreach (AudioClip c in _instance.clips)

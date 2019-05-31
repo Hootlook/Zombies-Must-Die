@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerMovements : PlayerBehavior
 {
     CharacterController cc;
-    Transform camera;
+    Transform cam;
     Inputs i;
 	Vector3 moveDirection;
     public Transform spine;
@@ -32,7 +32,7 @@ public class PlayerMovements : PlayerBehavior
     {
         if (networkObject == null) return;
 
-        if(camera == null) camera = Camera.main.transform;
+        if(cam == null) cam = Camera.main.transform;
 
         if (networkObject.IsOwner)
         {
@@ -40,7 +40,7 @@ public class PlayerMovements : PlayerBehavior
             Vector2 inputDir = input.normalized;
 
             if (inputDir != Vector2.zero || i.isAiming || i.isShooting)
-                transform.eulerAngles = Vector3.up * camera.eulerAngles.y;
+                transform.eulerAngles = Vector3.up * cam.eulerAngles.y;
 
             speed = i.isAiming ? speedWhileAiming : speedWhileNotAiming;
 

@@ -34,10 +34,10 @@ public class Grenade : GrenadeBehavior
         a.Play();
 
         if(networkObject.IsOwner)
-        networkObject.Destroy(5000);
+        networkObject.Destroy(4000);
 
         FxManager.EmitParticleOnDestroy("WFX_Explosion", transform);
-        FxManager.EmitSoundOnDestroy("grenade_explosion", transform);
+        FxManager.EmitSoundOnDestroy("grenade_explosion", transform, 2);
     }
 
     void Update()

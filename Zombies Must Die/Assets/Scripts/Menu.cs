@@ -6,12 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class Menu : PlayerBehavior
 {
-	[SerializeField]
-	GameObject menu;
+	public GameObject menu;
 	Inputs i;
 	CameraController cc;
 	bool menuState;
-
 
 	private void Start()
 	{
@@ -21,7 +19,12 @@ public class Menu : PlayerBehavior
 		gameObject.SetActive(false);
 	}
 
-	private void playerInstantiated()
+    private void OnDisable()
+    {
+        menuState = false;
+    }
+
+    private void playerInstantiated()
 	{
 		i = GameObject.FindWithTag("Player").GetComponent<Inputs>();
 		cc = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
@@ -60,6 +63,11 @@ public class Menu : PlayerBehavior
 			gameObject.SetActive(true);
 		}
 	}
+
+    public void Resume()
+    {
+        menuState = !menuState;
+    }
 
 	public void Disconnect()
 	{

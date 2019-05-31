@@ -63,19 +63,9 @@ public class WeaponManager : PlayerBehavior
 			if (i == selectedWeapon)
 			{
 				weapon.gameObject.SetActive(true);
-				grip = weapon.Find("Rig/Main/Grip").gameObject;
 			}
 			else weapon.gameObject.SetActive(false);
 			i++;
 		}
 	}
-    /*
-	private void OnAnimatorIK(int layerIndex)
-	{
-		Vector3 target = grip.transform.position + grip.transform.TransformDirection(handOffset);
-		layerIndex = a.GetLayerIndex("Upper Body");
-		a.SetIKPosition(AvatarIKGoal.LeftHand, target);
-		a.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-
-	}*/
 }
