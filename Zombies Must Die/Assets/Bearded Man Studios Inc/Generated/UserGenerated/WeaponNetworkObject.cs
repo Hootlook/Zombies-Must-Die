@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BeardedManStudios.Forge.Networking.Generated
 {
 	[GeneratedInterpol("{\"inter\":[0.2,0.2,0]")]
-	public partial class GrenadeNetworkObject : NetworkObject
+	public partial class WeaponNetworkObject : NetworkObject
 	{
 		public const int IDENTITY = 6;
 
@@ -246,9 +246,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		}
 
-		public GrenadeNetworkObject() : base() { Initialize(); }
-		public GrenadeNetworkObject(NetWorker networker, INetworkBehavior networkBehavior = null, int createCode = 0, byte[] metadata = null) : base(networker, networkBehavior, createCode, metadata) { Initialize(); }
-		public GrenadeNetworkObject(NetWorker networker, uint serverId, FrameStream frame) : base(networker, serverId, frame) { Initialize(); }
+		public WeaponNetworkObject() : base() { Initialize(); }
+		public WeaponNetworkObject(NetWorker networker, INetworkBehavior networkBehavior = null, int createCode = 0, byte[] metadata = null) : base(networker, networkBehavior, createCode, metadata) { Initialize(); }
+		public WeaponNetworkObject(NetWorker networker, uint serverId, FrameStream frame) : base(networker, serverId, frame) { Initialize(); }
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

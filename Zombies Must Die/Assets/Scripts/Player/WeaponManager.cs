@@ -1,4 +1,6 @@
 ﻿using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,36 +8,36 @@ using UnityEngine;
 public class WeaponManager : PlayerBehavior
 {
 	public int selectedWeapon = 0;
+    public int weaponId;
 	public Transform weaponBone;
-	GameObject grip;
+    public WeaponBase currentWeapon;
     PlayerSetup ps;
-	Animator a;
-	public Vector3 handOffset;
+    Inputs i;
 
     protected override void NetworkStart()
     {
         base.NetworkStart();
 
-        a = GetComponent<Animator>();
         ps = GetComponent<PlayerSetup>();
+        i = GetComponent<Inputs>();
 		SelectWeapon(selectedWeapon);
 	}
 
 	void Update()
-	{
+    {
         if (networkObject == null) return;
 
         if (networkObject.IsOwner)
         {
             int previousSelectedWeapon = selectedWeapon;
 
-            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+            if (i.mouseWheel > 0f)
             {
                 if (selectedWeapon >= weaponBone.childCount - 1) selectedWeapon = 0;
                 else selectedWeapon++;
             }
 
-            if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+            if (i.mouseWheel < 0f)
             {
                 if (selectedWeapon <= 0) selectedWeapon = weaponBone.childCount - 1;
                 else selectedWeapon--;
@@ -52,10 +54,32 @@ public class WeaponManager : PlayerBehavior
             SelectWeapon(ps.selectedWeapon);
         }
 
-        a.SetInteger("selectedWeapon", selectedWeapon);
+        //CheckForChanges();
+
+        //JUST FOR DEBUGGING
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            WeaponBehavior g = NetworkManager.Instance.InstantiateWeapon(index: 1, position: weaponBone.position, rotation: weaponBone.rotation);
+            g.transform.SetParent(weaponBone);
+        }
+
     }
 
-	void SelectWeapon(int selectedWeapon)
+    private void CheckForChanges()
+    {
+        int actifWeapons = 0;
+        foreach (Transform weapon in weaponBone)
+        {
+            if (weapon.gameObject.activeInHierarchy == true) actifWeapons++;
+        }
+        if (actifWeapons == 0)
+        {
+            SelectWeapon(0);
+        }
+    }
+
+    public void SelectWeapon(int selectedWeapon)
 	{
 		int i = 0;
 		foreach (Transform weapon in weaponBone)
@@ -63,7 +87,9 @@ public class WeaponManager : PlayerBehavior
 			if (i == selectedWeapon)
 			{
 				weapon.gameObject.SetActive(true);
-			}
+                currentWeapon = weapon.GetComponent<WeaponBase>();
+                weaponId = currentWeapon.id;
+            }
 			else weapon.gameObject.SetActive(false);
 			i++;
 		}

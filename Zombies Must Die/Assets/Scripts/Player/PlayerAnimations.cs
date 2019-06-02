@@ -4,37 +4,39 @@ using UnityEngine;
 
 public class PlayerAnimations : PlayerBehavior
 {
-    Animator a;
-	CharacterController cc;
-    CameraController cameraController;
-    PlayerAudio pa;
-    WeaponManager wm;
-    PlayerSetup ps;
     Inputs i;
+    Animator a;
+    PlayerAudio pa;
+    PlayerSetup ps;
+    WeaponManager wm;
+	CharacterController cc;
+    
+    public Transform spine;
 
-    private void Start()
+    protected override void NetworkStart()
     {
-        a = GetComponent<Animator>();
-		cc = GetComponent<CharacterController>();
+        base.NetworkStart();
+
         i = GetComponent<Inputs>();
+        a = GetComponent<Animator>();
         ps = GetComponent<PlayerSetup>();
         pa = GetComponent<PlayerAudio>();
         wm = GetComponent<WeaponManager>();
+        cc = GetComponent<CharacterController>();
     }
 
     void Update()
     {
         if (networkObject == null) return;
 
-        cameraController = GameObject.Find("Camera(Clone)").GetComponent<CameraController>();
-
         float aiming = i.isAiming ? 1 : 0;
-        float angleX = networkObject.IsOwner ? -cameraController.vertical : -ps.vertical;
+        float angleX = networkObject.IsOwner ? -ps.cameraController.vertical : -ps.vertical;
 
         a.SetFloat("AngleX", angleX);
         a.SetFloat("Vertical", i.vertical);
         a.SetFloat("Horizontal", i.horizontal);
-        a.SetBool("Shooting", i.isShooting);
+        a.SetBool("Shooting", wm.currentWeapon.isShooting);
+        a.SetInteger("selectedWeapon", wm.weaponId);
         a.SetLayerWeight(1, aiming);
 
         if (networkObject.IsOwner)
@@ -55,16 +57,17 @@ public class PlayerAnimations : PlayerBehavior
 
     public void ThrowingEvent()
     {
-        Transform t = wm.weaponBone.Find("Grenade");
-
-        if (networkObject.IsOwner && t != null)
+        if (networkObject.IsOwner && wm.currentWeapon.transform.name == "Grenade")
         {
-            GrenadeBehavior g = NetworkManager.Instance.InstantiateGrenade(position: t.position, rotation: t.rotation);
-            g.GetComponent<Rigidbody>().isKinematic = false;
-            g.GetComponent<Rigidbody>().AddForce(cameraController.transform.forward * 500);
-            g.GetComponent<Rigidbody>().AddTorque(t.up * 500);
+            wm.currentWeapon.isArmed = true;
         }
 
         AudioUtils.PlaySound("Throwing", pa.clipList, pa.a);
-    } 
+    }
+
+    private void LateUpdate()
+    {
+        if (i.isAiming)
+            spine.rotation = Quaternion.Euler(spine.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 57, spine.rotation.eulerAngles.z);
+    }
 }

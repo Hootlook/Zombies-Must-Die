@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : GrenadeBehavior
+public class Grenade : WeaponBehavior
 {
     Rigidbody rb;
+    Inputs i;
     AudioSource a;
-    SphereCollider sc;
+    WeaponBase wb;
     public float explosionRadius = 12;
     private int layerMask = 1 << 11;
     public float proximity = 50;
+    bool oneTime = false;
 
     protected override void NetworkStart()
     {
@@ -18,55 +20,73 @@ public class Grenade : GrenadeBehavior
 
         layerMask = ~layerMask;
 
-        if (this == !enabled) return;
-
         gameObject.name = "Grenade";
+        i = GetComponentInParent<Inputs>();
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
-        sc = GetComponent<SphereCollider>();
-
-        networkObject.position = transform.position;
-        networkObject.rotation = transform.rotation;
-        networkObject.positionInterpolation.target = transform.position;
-        networkObject.rotationInterpolation.target = transform.rotation;
-        networkObject.SnapInterpolations();
-
-        a.Play();
-
-        if(networkObject.IsOwner)
-        networkObject.Destroy(4000);
-
-        FxManager.EmitParticleOnDestroy("WFX_Explosion", transform);
-        FxManager.EmitSoundOnDestroy("grenade_explosion", transform, 2);
+        wb = GetComponent<WeaponBase>();
     }
 
     void Update()
     {
-        if (networkObject.IsOwner)
+        if (wb.isArmed)
         {
-            networkObject.position = transform.position;
-            networkObject.rotation = transform.rotation;
+            if (!oneTime)
+            {
+                transform.SetParent(null);
+                networkObject.position = transform.position;
+                networkObject.rotation = transform.rotation;
+                networkObject.positionInterpolation.target = transform.position;
+                networkObject.rotationInterpolation.target = transform.rotation;
+                networkObject.SnapInterpolations();
+
+                a.Play();
+
+                if (networkObject.IsOwner)
+                {
+                    rb.isKinematic = false;
+                    rb.AddForce(Camera.main.transform.forward * 500);
+                    rb.AddTorque(transform.right * 500);
+                    networkObject.Destroy(4000);
+                }
+
+                FxManager.EmitParticleOnDestroy("WFX_Explosion", transform);
+                FxManager.EmitSoundOnDestroy("grenade_explosion", transform, 2);
+
+                oneTime = true;
+            }
+
+            if (networkObject.IsOwner)
+            {
+                networkObject.position = transform.position;
+                networkObject.rotation = transform.rotation;
+            }
+            else
+            {
+                transform.position = networkObject.position;
+                transform.rotation = networkObject.rotation;
+            }
         }
-        else
-        {
-            transform.position = networkObject.position;
-            transform.rotation = networkObject.rotation;
-        }
+
+        wb.isShooting = i.isShooting;
     }
 
     private void OnDestroy()
     {
-        Collider[] objectsInRange = Physics.OverlapSphere(transform.position, explosionRadius, layerMask);
-        foreach (Collider col in objectsInRange)
+        if (wb.isArmed)
         {
-            if (Physics.Raycast(transform.position, (col.transform.position - transform.position), out RaycastHit hit, explosionRadius, layerMask))
+            Collider[] objectsInRange = Physics.OverlapSphere(transform.position, explosionRadius, layerMask);
+            foreach (Collider col in objectsInRange)
             {
-                if (hit.collider.tag == "Player")
+                if (Physics.Raycast(transform.position, (col.transform.position - transform.position), out RaycastHit hit, explosionRadius, layerMask))
                 {
-                    float distance = Vector3.Distance(hit.collider.transform.position, transform.position);
-                    proximity /= distance;
+                    if (hit.collider.tag == "Player")
+                    {
+                        float distance = Vector3.Distance(hit.collider.transform.position, transform.position);
+                        proximity /= distance;
 
-                    EZCameraShake.CameraShaker.Instance.ShakeOnce(5, proximity, 0, 1);
+                        EZCameraShake.CameraShaker.Instance.ShakeOnce(5, proximity, 0, 1);
+                    }
                 }
             }
         }

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shotgun : weaponsBehavior
+public class Shotgun : WeaponBehavior
 {
 	public int pellets = 6;
 	public float range = 30;
@@ -15,6 +15,7 @@ public class Shotgun : weaponsBehavior
     PlayerSetup ps;
     Inputs i;
     AudioSource a;
+    WeaponBase wb;
     private Vector3 camForward;
 
 
@@ -24,6 +25,7 @@ public class Shotgun : weaponsBehavior
 
         i = GetComponentInParent<Inputs>();
         ps = GetComponentInParent<PlayerSetup>();
+        wb = GetComponent<WeaponBase>();
         a = GetComponent<AudioSource>();
     }
 
@@ -33,13 +35,14 @@ public class Shotgun : weaponsBehavior
 
         if (fireTimer < fireRate) fireTimer += Time.fixedDeltaTime;
 
-        RaycastHit hit;
-
         camForward = networkObject.IsOwner ? ps.networkObject.cameraAxis : ps.camAxis;
 
-		if (i.isShooting)
+
+        if (i.isShooting)
 		{
             if (fireTimer <= fireRate) return;
+
+            wb.isShooting = true;
 
 			for (int i = 0; i < pellets; i++)
 			{
@@ -51,18 +54,21 @@ public class Shotgun : weaponsBehavior
                 Vector3 spread = transform.TransformDirection(new Vector3(spreadX, spreadY, spreadZ));
 				Vector3 direction = (camForward + spread).normalized;
 
-                if (Physics.Raycast(transform.position, camForward + direction, out hit, range))
-				{
-					Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
-				}
+                if (Physics.Raycast(transform.position, camForward + direction, out RaycastHit hit, range))
+                {
+                    //Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
+                }
 
-                if(networkObject.IsOwner)
+                if (networkObject.IsOwner)
                 EZCameraShake.CameraShaker.Instance.ShakeOnce(1, 5, 0, 1);
 			}
-
             a.Play();
 
             fireTimer = 0;
         }
+        else
+        wb.isShooting = false;
     }
+
+
 }

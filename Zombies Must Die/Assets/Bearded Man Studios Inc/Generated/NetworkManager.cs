@@ -12,9 +12,8 @@ namespace BeardedManStudios.Forge.Networking.Unity
 
 		public GameObject[] ChatManagerNetworkObject = null;
 		public GameObject[] GameManagerNetworkObject = null;
-		public GameObject[] GrenadeNetworkObject = null;
 		public GameObject[] PlayerNetworkObject = null;
-		public GameObject[] weaponsNetworkObject = null;
+		public GameObject[] WeaponNetworkObject = null;
 
 		protected virtual void SetupObjectCreatedEvent()
 		{
@@ -78,29 +77,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 						objectInitialized(newObj, obj);
 				});
 			}
-			else if (obj is GrenadeNetworkObject)
-			{
-				MainThreadManager.Run(() =>
-				{
-					NetworkBehavior newObj = null;
-					if (!NetworkBehavior.skipAttachIds.TryGetValue(obj.NetworkId, out newObj))
-					{
-						if (GrenadeNetworkObject.Length > 0 && GrenadeNetworkObject[obj.CreateCode] != null)
-						{
-							var go = Instantiate(GrenadeNetworkObject[obj.CreateCode]);
-							newObj = go.GetComponent<GrenadeBehavior>();
-						}
-					}
-
-					if (newObj == null)
-						return;
-						
-					newObj.Initialize(obj);
-
-					if (objectInitialized != null)
-						objectInitialized(newObj, obj);
-				});
-			}
 			else if (obj is PlayerNetworkObject)
 			{
 				MainThreadManager.Run(() =>
@@ -124,17 +100,17 @@ namespace BeardedManStudios.Forge.Networking.Unity
 						objectInitialized(newObj, obj);
 				});
 			}
-			else if (obj is weaponsNetworkObject)
+			else if (obj is WeaponNetworkObject)
 			{
 				MainThreadManager.Run(() =>
 				{
 					NetworkBehavior newObj = null;
 					if (!NetworkBehavior.skipAttachIds.TryGetValue(obj.NetworkId, out newObj))
 					{
-						if (weaponsNetworkObject.Length > 0 && weaponsNetworkObject[obj.CreateCode] != null)
+						if (WeaponNetworkObject.Length > 0 && WeaponNetworkObject[obj.CreateCode] != null)
 						{
-							var go = Instantiate(weaponsNetworkObject[obj.CreateCode]);
-							newObj = go.GetComponent<weaponsBehavior>();
+							var go = Instantiate(WeaponNetworkObject[obj.CreateCode]);
+							newObj = go.GetComponent<WeaponBehavior>();
 						}
 					}
 
@@ -181,18 +157,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			
 			return netBehavior;
 		}
-		[Obsolete("Use InstantiateGrenade instead, its shorter and easier to type out ;)")]
-		public GrenadeBehavior InstantiateGrenadeNetworkObject(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
-		{
-			var go = Instantiate(GrenadeNetworkObject[index]);
-			var netBehavior = go.GetComponent<GrenadeBehavior>();
-			var obj = netBehavior.CreateNetworkObject(Networker, index);
-			go.GetComponent<GrenadeBehavior>().networkObject = (GrenadeNetworkObject)obj;
-
-			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
-			
-			return netBehavior;
-		}
 		[Obsolete("Use InstantiatePlayer instead, its shorter and easier to type out ;)")]
 		public PlayerBehavior InstantiatePlayerNetworkObject(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
 		{
@@ -205,13 +169,13 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			
 			return netBehavior;
 		}
-		[Obsolete("Use Instantiateweapons instead, its shorter and easier to type out ;)")]
-		public weaponsBehavior InstantiateweaponsNetworkObject(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
+		[Obsolete("Use InstantiateWeapon instead, its shorter and easier to type out ;)")]
+		public WeaponBehavior InstantiateWeaponNetworkObject(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
 		{
-			var go = Instantiate(weaponsNetworkObject[index]);
-			var netBehavior = go.GetComponent<weaponsBehavior>();
+			var go = Instantiate(WeaponNetworkObject[index]);
+			var netBehavior = go.GetComponent<WeaponBehavior>();
 			var obj = netBehavior.CreateNetworkObject(Networker, index);
-			go.GetComponent<weaponsBehavior>().networkObject = (weaponsNetworkObject)obj;
+			go.GetComponent<WeaponBehavior>().networkObject = (WeaponNetworkObject)obj;
 
 			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
 			
@@ -321,57 +285,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			return netBehavior;
 		}
 		/// <summary>
-		/// Instantiate an instance of Grenade
-		/// </summary>
-		/// <returns>
-		/// A local instance of GrenadeBehavior
-		/// </returns>
-		/// <param name="index">The index of the Grenade prefab in the NetworkManager to Instantiate</param>
-		/// <param name="position">Optional parameter which defines the position of the created GameObject</param>
-		/// <param name="rotation">Optional parameter which defines the rotation of the created GameObject</param>
-		/// <param name="sendTransform">Optional Parameter to send transform data to other connected clients on Instantiation</param>
-		public GrenadeBehavior InstantiateGrenade(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
-		{
-			var go = Instantiate(GrenadeNetworkObject[index]);
-			var netBehavior = go.GetComponent<GrenadeBehavior>();
-
-			NetworkObject obj = null;
-			if (!sendTransform && position == null && rotation == null)
-				obj = netBehavior.CreateNetworkObject(Networker, index);
-			else
-			{
-				metadata.Clear();
-
-				if (position == null && rotation == null)
-				{
-					byte transformFlags = 0x1 | 0x2;
-					ObjectMapper.Instance.MapBytes(metadata, transformFlags);
-					ObjectMapper.Instance.MapBytes(metadata, go.transform.position, go.transform.rotation);
-				}
-				else
-				{
-					byte transformFlags = 0x0;
-					transformFlags |= (byte)(position != null ? 0x1 : 0x0);
-					transformFlags |= (byte)(rotation != null ? 0x2 : 0x0);
-					ObjectMapper.Instance.MapBytes(metadata, transformFlags);
-
-					if (position != null)
-						ObjectMapper.Instance.MapBytes(metadata, position.Value);
-
-					if (rotation != null)
-						ObjectMapper.Instance.MapBytes(metadata, rotation.Value);
-				}
-
-				obj = netBehavior.CreateNetworkObject(Networker, index, metadata.CompressBytes());
-			}
-
-			go.GetComponent<GrenadeBehavior>().networkObject = (GrenadeNetworkObject)obj;
-
-			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
-			
-			return netBehavior;
-		}
-		/// <summary>
 		/// Instantiate an instance of Player
 		/// </summary>
 		/// <returns>
@@ -423,19 +336,19 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			return netBehavior;
 		}
 		/// <summary>
-		/// Instantiate an instance of weapons
+		/// Instantiate an instance of Weapon
 		/// </summary>
 		/// <returns>
-		/// A local instance of weaponsBehavior
+		/// A local instance of WeaponBehavior
 		/// </returns>
-		/// <param name="index">The index of the weapons prefab in the NetworkManager to Instantiate</param>
+		/// <param name="index">The index of the Weapon prefab in the NetworkManager to Instantiate</param>
 		/// <param name="position">Optional parameter which defines the position of the created GameObject</param>
 		/// <param name="rotation">Optional parameter which defines the rotation of the created GameObject</param>
 		/// <param name="sendTransform">Optional Parameter to send transform data to other connected clients on Instantiation</param>
-		public weaponsBehavior Instantiateweapons(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
+		public WeaponBehavior InstantiateWeapon(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
 		{
-			var go = Instantiate(weaponsNetworkObject[index]);
-			var netBehavior = go.GetComponent<weaponsBehavior>();
+			var go = Instantiate(WeaponNetworkObject[index]);
+			var netBehavior = go.GetComponent<WeaponBehavior>();
 
 			NetworkObject obj = null;
 			if (!sendTransform && position == null && rotation == null)
@@ -467,7 +380,7 @@ namespace BeardedManStudios.Forge.Networking.Unity
 				obj = netBehavior.CreateNetworkObject(Networker, index, metadata.CompressBytes());
 			}
 
-			go.GetComponent<weaponsBehavior>().networkObject = (weaponsNetworkObject)obj;
+			go.GetComponent<WeaponBehavior>().networkObject = (WeaponNetworkObject)obj;
 
 			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
 			

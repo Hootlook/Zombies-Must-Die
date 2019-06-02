@@ -31,17 +31,13 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new GameManagerNetworkObject(networker, id, frame);
 						break;
-					case GrenadeNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new GrenadeNetworkObject(networker, id, frame);
-						break;
 					case PlayerNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new PlayerNetworkObject(networker, id, frame);
 						break;
-					case weaponsNetworkObject.IDENTITY:
+					case WeaponNetworkObject.IDENTITY:
 						availableCallback = true;
-						obj = new weaponsNetworkObject(networker, id, frame);
+						obj = new WeaponNetworkObject(networker, id, frame);
 						break;
 				}
 

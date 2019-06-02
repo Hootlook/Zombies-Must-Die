@@ -9,8 +9,9 @@ public class PlayerSetup : PlayerBehavior
     public Vector3 camAxis;
     public int selectedWeapon;
     PlayerMovements pm;
+    PlayerAnimations pa;
     CharacterController cc;
-    CameraController cameraController;
+    public CameraController cameraController;
     WeaponManager wm;
 	public delegate void playerInstance();
 	public static event playerInstance PlayerLoaded;
@@ -26,6 +27,7 @@ public class PlayerSetup : PlayerBehavior
         }
         cc = GetComponent<CharacterController>();
         pm = GetComponent<PlayerMovements>();
+        pa = GetComponent<PlayerAnimations>();
         wm = GetComponent<WeaponManager>();
         cameraController = GameObject.Find("Camera(Clone)").GetComponent<CameraController>();
 
@@ -40,7 +42,7 @@ public class PlayerSetup : PlayerBehavior
             {
                 networkObject.position = transform.position;
                 networkObject.rotation = transform.rotation;
-                networkObject.spine = pm.spine.rotation;
+                networkObject.spine = pa.spine.rotation;
                 networkObject.isGrounded = cc.isGrounded;
                 networkObject.selectedWeapon = wm.selectedWeapon;
                 networkObject.cameraVertical = cameraController.vertical;
@@ -50,7 +52,7 @@ public class PlayerSetup : PlayerBehavior
             {
                 transform.position = networkObject.position;
                 transform.rotation = networkObject.rotation;
-                pm.spine.rotation = networkObject.spine;
+                pa.spine.rotation = networkObject.spine;
                 isGrounded = networkObject.isGrounded;
                 vertical = networkObject.cameraVertical;
                 camAxis = networkObject.cameraAxis;

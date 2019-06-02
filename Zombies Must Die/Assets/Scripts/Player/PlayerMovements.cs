@@ -10,8 +10,6 @@ public class PlayerMovements : PlayerBehavior
     Transform cam;
     Inputs i;
 	Vector3 moveDirection;
-    public Transform spine;
-    public float offset = 57;
 
     [Range(1, 15)]
 	public float speedWhileAiming = 2;
@@ -62,10 +60,4 @@ public class PlayerMovements : PlayerBehavior
             cc.Move(moveDirection * Time.deltaTime);
         }
 	}
-
-    private void LateUpdate()
-    {
-        if (i.isAiming)
-            spine.rotation = Quaternion.Euler(spine.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + offset, spine.rotation.eulerAngles.z);
-    }
 }

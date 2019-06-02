@@ -47,9 +47,9 @@ MonoBehaviour:
   - {fileID: 1000012032569418, guid: b454b1be0b2c3fa4fb48430867af7566, type: 3}
   GameManagerNetworkObject:
   - {fileID: 5908732170128932615, guid: ac9f455f917015c4fb7ad01d1347be0e, type: 3}
-  GrenadeNetworkObject:
-  - {fileID: 6334837998813278055, guid: 0f1be3526e844514ca89997e98f605fe, type: 3}
   PlayerNetworkObject:
   - {fileID: 2065210390144529712, guid: aae8e9ad4e1a11a4b9770795cf5bba6e, type: 3}
-  weaponsNetworkObject: []
+  WeaponNetworkObject:
+  - {fileID: 8614543292599822729, guid: 95eab3eafaf6dc948b14c6a1ed00944f, type: 3}
+  - {fileID: 6334837998813278055, guid: 0f1be3526e844514ca89997e98f605fe, type: 3}
   automaticScenes: 1

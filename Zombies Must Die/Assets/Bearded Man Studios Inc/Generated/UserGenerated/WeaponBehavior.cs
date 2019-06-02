@@ -6,10 +6,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 {
 	[GeneratedRPC("{\"types\":[]")]
 	[GeneratedRPCVariableNames("{\"types\":[]")]
-	public abstract partial class GrenadeBehavior : NetworkBehavior
+	public abstract partial class WeaponBehavior : NetworkBehavior
 	{
 		
-		public GrenadeNetworkObject networkObject = null;
+		public WeaponNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -17,7 +17,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (GrenadeNetworkObject)obj;
+			networkObject = (WeaponNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
@@ -78,7 +78,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new GrenadeNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new WeaponNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -89,7 +89,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new GrenadeNetworkObject(networker, this, createCode, metadata);
+			return new WeaponNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()

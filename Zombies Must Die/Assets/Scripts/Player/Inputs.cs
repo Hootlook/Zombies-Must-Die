@@ -9,15 +9,17 @@ public class Inputs : PlayerBehavior
     public float vertical;
     public float horizontal;
     public float mouseY;
+    public float mouseWheel;
 
 	private void OnDisable()
 	{
-		horizontal = 0;
+        isJumping = false;
+        isShooting = false;
+        isAiming = false;
+        horizontal = 0;
 		vertical = 0;
 		mouseY = 0;
-		isJumping = false;
-		isShooting = false;
-		isAiming = false;
+        mouseWheel = 0;
 	}
 
 	private void Update()
@@ -32,6 +34,7 @@ public class Inputs : PlayerBehavior
             isJumping = Input.GetButton("Jump");
             isShooting = Input.GetButton("Fire1");
             isAiming = Input.GetButton("Fire2");
+            mouseWheel = Input.GetAxis("MouseWheel");
 
             networkObject.horizontal = horizontal;
             networkObject.vertical = vertical;
