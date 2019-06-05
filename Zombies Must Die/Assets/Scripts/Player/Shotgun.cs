@@ -37,7 +37,6 @@ public class Shotgun : WeaponBehavior
 
         camForward = networkObject.IsOwner ? ps.networkObject.cameraAxis : ps.camAxis;
 
-
         if (i.isShooting)
 		{
             if (fireTimer <= fireRate) return;
@@ -66,9 +65,7 @@ public class Shotgun : WeaponBehavior
 
             fireTimer = 0;
         }
-        else
+        
         wb.isShooting = false;
     }
-
-
 }

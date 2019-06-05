@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Grenade : WeaponBehavior
 {
+    public float explosionRadius = 12;
+    public float proximity = 50;
+    int layerMask = 1 << 11;
+    bool oneTime = false;
+    WeaponBase wb;
+    AudioSource a;
     Rigidbody rb;
     Inputs i;
-    AudioSource a;
-    WeaponBase wb;
-    public float explosionRadius = 12;
-    private int layerMask = 1 << 11;
-    public float proximity = 50;
-    bool oneTime = false;
 
     protected override void NetworkStart()
     {
@@ -29,6 +29,8 @@ public class Grenade : WeaponBehavior
 
     void Update()
     {
+        if (networkObject == null) return;
+
         if (wb.isArmed)
         {
             if (!oneTime)

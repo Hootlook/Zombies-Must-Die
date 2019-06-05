@@ -2479,6 +2479,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shotgun
       objectReference: {fileID: 0}
+    - target: {fileID: 8614543292599822729, guid: 95eab3eafaf6dc948b14c6a1ed00944f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7290095798598126093, guid: 95eab3eafaf6dc948b14c6a1ed00944f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2553,6 +2558,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Grenade
+      objectReference: {fileID: 0}
+    - target: {fileID: 6334837998813278055, guid: 0f1be3526e844514ca89997e98f605fe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2578434685154159465, guid: 0f1be3526e844514ca89997e98f605fe,
         type: 3}
@@ -2633,6 +2643,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Axe
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969199315738341269, guid: 0f2a18be28fd9784f8705bf11c93b75f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7808527982940133740, guid: 0f2a18be28fd9784f8705bf11c93b75f,
         type: 3}

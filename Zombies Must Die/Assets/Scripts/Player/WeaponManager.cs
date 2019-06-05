@@ -53,11 +53,21 @@ public class WeaponManager : PlayerBehavior
             selectedWeapon = ps.selectedWeapon;
             SelectWeapon(ps.selectedWeapon);
         }
-
         //CheckForChanges();
+        if (networkObject.IsOwner)
+        {
+            if (i.isShooting)
+            {
+                if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 5))
+                {
+                    Debug.Log(hit.transform.name);
+                }
+            }
+        }
+
 
         //JUST FOR DEBUGGING
-
+        if(networkObject.IsOwner)
         if (Input.GetKeyDown(KeyCode.G))
         {
             WeaponBehavior g = NetworkManager.Instance.InstantiateWeapon(index: 1, position: weaponBone.position, rotation: weaponBone.rotation);
