@@ -23,5 +23,4 @@ public class WeaponBase : WeaponBehavior
             isArmed = networkObject.isArmed;
         }
     }
-
 }

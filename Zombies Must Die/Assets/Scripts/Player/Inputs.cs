@@ -5,6 +5,7 @@ public class Inputs : PlayerBehavior
 {
     public bool isJumping;
     public bool isAiming;
+    public bool isUsing;
     public bool isShooting;
     public float vertical;
     public float horizontal;
@@ -16,6 +17,7 @@ public class Inputs : PlayerBehavior
         isJumping = false;
         isShooting = false;
         isAiming = false;
+        isUsing = false;
         horizontal = 0;
 		vertical = 0;
 		mouseY = 0;
@@ -34,6 +36,7 @@ public class Inputs : PlayerBehavior
             isJumping = Input.GetButton("Jump");
             isShooting = Input.GetButton("Fire1");
             isAiming = Input.GetButton("Fire2");
+            isUsing = Input.GetButtonDown("Interact");
             mouseWheel = Input.GetAxis("MouseWheel");
 
             networkObject.horizontal = horizontal;
@@ -41,6 +44,7 @@ public class Inputs : PlayerBehavior
             networkObject.isJumping = isJumping;
             networkObject.isShooting = isShooting;
             networkObject.isAiming = isAiming;
+            networkObject.isUsing = isUsing;
         }
         else
         {
@@ -49,6 +53,7 @@ public class Inputs : PlayerBehavior
             isJumping = networkObject.isJumping;
             isShooting = networkObject.isShooting;
             isAiming = networkObject.isAiming;
+            isUsing = networkObject.isUsing;
         }
     }
 }

@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.2,0.2,0.2,0.2,0.2,0.2,0,0,0,0,0,0,0]")]
+	[GeneratedInterpol("{\"inter\":[0.2,0.2,0.2,0.2,0.2,0.2,0,0,0,0,0,0,0,0]")]
 	public partial class PlayerNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 4;
+		public const int IDENTITY = 5;
 
 		private byte[] _dirtyFields = new byte[2];
 
@@ -233,6 +233,37 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (fieldAltered != null) fieldAltered("isShooting", _isShooting, timestep);
 		}
 		[ForgeGeneratedField]
+		private bool _isUsing;
+		public event FieldEvent<bool> isUsingChanged;
+		public Interpolated<bool> isUsingInterpolation = new Interpolated<bool>() { LerpT = 0f, Enabled = false };
+		public bool isUsing
+		{
+			get { return _isUsing; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_isUsing == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[0] |= 0x80;
+				_isUsing = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetisUsingDirty()
+		{
+			_dirtyFields[0] |= 0x80;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_isUsing(ulong timestep)
+		{
+			if (isUsingChanged != null) isUsingChanged(_isUsing, timestep);
+			if (fieldAltered != null) fieldAltered("isUsing", _isUsing, timestep);
+		}
+		[ForgeGeneratedField]
 		private bool _isAiming;
 		public event FieldEvent<bool> isAimingChanged;
 		public Interpolated<bool> isAimingInterpolation = new Interpolated<bool>() { LerpT = 0f, Enabled = false };
@@ -246,7 +277,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					return;
 
 				// Mark the field as dirty for the network to transmit
-				_dirtyFields[0] |= 0x80;
+				_dirtyFields[1] |= 0x1;
 				_isAiming = value;
 				hasDirtyFields = true;
 			}
@@ -254,7 +285,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public void SetisAimingDirty()
 		{
-			_dirtyFields[0] |= 0x80;
+			_dirtyFields[1] |= 0x1;
 			hasDirtyFields = true;
 		}
 
@@ -277,7 +308,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					return;
 
 				// Mark the field as dirty for the network to transmit
-				_dirtyFields[1] |= 0x1;
+				_dirtyFields[1] |= 0x2;
 				_isJumping = value;
 				hasDirtyFields = true;
 			}
@@ -285,7 +316,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public void SetisJumpingDirty()
 		{
-			_dirtyFields[1] |= 0x1;
+			_dirtyFields[1] |= 0x2;
 			hasDirtyFields = true;
 		}
 
@@ -308,7 +339,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					return;
 
 				// Mark the field as dirty for the network to transmit
-				_dirtyFields[1] |= 0x2;
+				_dirtyFields[1] |= 0x4;
 				_isGrounded = value;
 				hasDirtyFields = true;
 			}
@@ -316,7 +347,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public void SetisGroundedDirty()
 		{
-			_dirtyFields[1] |= 0x2;
+			_dirtyFields[1] |= 0x4;
 			hasDirtyFields = true;
 		}
 
@@ -339,7 +370,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					return;
 
 				// Mark the field as dirty for the network to transmit
-				_dirtyFields[1] |= 0x4;
+				_dirtyFields[1] |= 0x8;
 				_ownerNetId = value;
 				hasDirtyFields = true;
 			}
@@ -347,7 +378,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public void SetownerNetIdDirty()
 		{
-			_dirtyFields[1] |= 0x4;
+			_dirtyFields[1] |= 0x8;
 			hasDirtyFields = true;
 		}
 
@@ -370,7 +401,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					return;
 
 				// Mark the field as dirty for the network to transmit
-				_dirtyFields[1] |= 0x8;
+				_dirtyFields[1] |= 0x10;
 				_cameraAxis = value;
 				hasDirtyFields = true;
 			}
@@ -378,7 +409,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public void SetcameraAxisDirty()
 		{
-			_dirtyFields[1] |= 0x8;
+			_dirtyFields[1] |= 0x10;
 			hasDirtyFields = true;
 		}
 
@@ -401,7 +432,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					return;
 
 				// Mark the field as dirty for the network to transmit
-				_dirtyFields[1] |= 0x10;
+				_dirtyFields[1] |= 0x20;
 				_selectedWeapon = value;
 				hasDirtyFields = true;
 			}
@@ -409,7 +440,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public void SetselectedWeaponDirty()
 		{
-			_dirtyFields[1] |= 0x10;
+			_dirtyFields[1] |= 0x20;
 			hasDirtyFields = true;
 		}
 
@@ -434,6 +465,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			verticalInterpolation.current = verticalInterpolation.target;
 			cameraVerticalInterpolation.current = cameraVerticalInterpolation.target;
 			isShootingInterpolation.current = isShootingInterpolation.target;
+			isUsingInterpolation.current = isUsingInterpolation.target;
 			isAimingInterpolation.current = isAimingInterpolation.target;
 			isJumpingInterpolation.current = isJumpingInterpolation.target;
 			isGroundedInterpolation.current = isGroundedInterpolation.target;
@@ -453,6 +485,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _vertical);
 			UnityObjectMapper.Instance.MapBytes(data, _cameraVertical);
 			UnityObjectMapper.Instance.MapBytes(data, _isShooting);
+			UnityObjectMapper.Instance.MapBytes(data, _isUsing);
 			UnityObjectMapper.Instance.MapBytes(data, _isAiming);
 			UnityObjectMapper.Instance.MapBytes(data, _isJumping);
 			UnityObjectMapper.Instance.MapBytes(data, _isGrounded);
@@ -493,6 +526,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			isShootingInterpolation.current = _isShooting;
 			isShootingInterpolation.target = _isShooting;
 			RunChange_isShooting(timestep);
+			_isUsing = UnityObjectMapper.Instance.Map<bool>(payload);
+			isUsingInterpolation.current = _isUsing;
+			isUsingInterpolation.target = _isUsing;
+			RunChange_isUsing(timestep);
 			_isAiming = UnityObjectMapper.Instance.Map<bool>(payload);
 			isAimingInterpolation.current = _isAiming;
 			isAimingInterpolation.target = _isAiming;
@@ -539,16 +576,18 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if ((0x40 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isShooting);
 			if ((0x80 & _dirtyFields[0]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isAiming);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isUsing);
 			if ((0x1 & _dirtyFields[1]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isJumping);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isAiming);
 			if ((0x2 & _dirtyFields[1]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isGrounded);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isJumping);
 			if ((0x4 & _dirtyFields[1]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _ownerNetId);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isGrounded);
 			if ((0x8 & _dirtyFields[1]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _cameraAxis);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _ownerNetId);
 			if ((0x10 & _dirtyFields[1]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _cameraAxis);
+			if ((0x20 & _dirtyFields[1]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _selectedWeapon);
 
 			// Reset all the dirty fields
@@ -659,6 +698,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			}
 			if ((0x80 & readDirtyFlags[0]) != 0)
 			{
+				if (isUsingInterpolation.Enabled)
+				{
+					isUsingInterpolation.target = UnityObjectMapper.Instance.Map<bool>(data);
+					isUsingInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_isUsing = UnityObjectMapper.Instance.Map<bool>(data);
+					RunChange_isUsing(timestep);
+				}
+			}
+			if ((0x1 & readDirtyFlags[1]) != 0)
+			{
 				if (isAimingInterpolation.Enabled)
 				{
 					isAimingInterpolation.target = UnityObjectMapper.Instance.Map<bool>(data);
@@ -670,7 +722,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_isAiming(timestep);
 				}
 			}
-			if ((0x1 & readDirtyFlags[1]) != 0)
+			if ((0x2 & readDirtyFlags[1]) != 0)
 			{
 				if (isJumpingInterpolation.Enabled)
 				{
@@ -683,7 +735,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_isJumping(timestep);
 				}
 			}
-			if ((0x2 & readDirtyFlags[1]) != 0)
+			if ((0x4 & readDirtyFlags[1]) != 0)
 			{
 				if (isGroundedInterpolation.Enabled)
 				{
@@ -696,7 +748,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_isGrounded(timestep);
 				}
 			}
-			if ((0x4 & readDirtyFlags[1]) != 0)
+			if ((0x8 & readDirtyFlags[1]) != 0)
 			{
 				if (ownerNetIdInterpolation.Enabled)
 				{
@@ -709,7 +761,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_ownerNetId(timestep);
 				}
 			}
-			if ((0x8 & readDirtyFlags[1]) != 0)
+			if ((0x10 & readDirtyFlags[1]) != 0)
 			{
 				if (cameraAxisInterpolation.Enabled)
 				{
@@ -722,7 +774,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_cameraAxis(timestep);
 				}
 			}
-			if ((0x10 & readDirtyFlags[1]) != 0)
+			if ((0x20 & readDirtyFlags[1]) != 0)
 			{
 				if (selectedWeaponInterpolation.Enabled)
 				{
@@ -776,6 +828,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_isShooting = (bool)isShootingInterpolation.Interpolate();
 				//RunChange_isShooting(isShootingInterpolation.Timestep);
+			}
+			if (isUsingInterpolation.Enabled && !isUsingInterpolation.current.UnityNear(isUsingInterpolation.target, 0.0015f))
+			{
+				_isUsing = (bool)isUsingInterpolation.Interpolate();
+				//RunChange_isUsing(isUsingInterpolation.Timestep);
 			}
 			if (isAimingInterpolation.Enabled && !isAimingInterpolation.current.UnityNear(isAimingInterpolation.target, 0.0015f))
 			{

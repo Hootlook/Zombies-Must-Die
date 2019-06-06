@@ -56,9 +56,9 @@ public class WeaponManager : PlayerBehavior
         //CheckForChanges();
         if (networkObject.IsOwner)
         {
-            if (i.isShooting)
+            if (i.isUsing)
             {
-                if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 5))
+                if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 1))
                 {
                     Debug.Log(hit.transform.name);
                 }
@@ -67,13 +67,14 @@ public class WeaponManager : PlayerBehavior
 
 
         //JUST FOR DEBUGGING
-        if(networkObject.IsOwner)
-        if (Input.GetKeyDown(KeyCode.G))
+        if (networkObject.IsOwner)
         {
-            WeaponBehavior g = NetworkManager.Instance.InstantiateWeapon(index: 1, position: weaponBone.position, rotation: weaponBone.rotation);
-            g.transform.SetParent(weaponBone);
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                WeaponBehavior g = NetworkManager.Instance.InstantiateWeapon(index: 1, position: weaponBone.position, rotation: weaponBone.rotation);
+                g.transform.SetParent(weaponBone);
+            }
         }
-
     }
 
     private void CheckForChanges()
