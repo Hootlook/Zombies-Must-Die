@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : WeaponBehavior, IEntityBase
+public class Grenade : WeaponBehavior
 {
     public float explosionRadius = 12;
     public float proximity = 50;
@@ -21,25 +21,11 @@ public class Grenade : WeaponBehavior, IEntityBase
         layerMask = ~layerMask;
 
         gameObject.name = "Grenade";
-        a = GetComponent<AudioSource>();
-        rb = GetComponent<Rigidbody>();
-        wb = GetComponent<WeaponBase>();
+        a = GetComponent<WeaponBase>().a;
+        rb = GetComponent<WeaponBase>().rb;
+        wb = GetComponent<WeaponBase>().wb;
     }
 
-    public void OnInteract(Transform from)
-    {
-        if (networkObject.IsOwner)
-        {
-            rb.isKinematic = true;
-        }
-
-        transform.SetParent(from.GetComponent<WeaponManager>().weaponBone);
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-        i = GetComponentInParent<Inputs>();
-        wb.isEquipped = true;
-    }
-    
     void Update()
     {
         if (networkObject == null) return;
@@ -71,17 +57,6 @@ public class Grenade : WeaponBehavior, IEntityBase
                     FxManager.EmitSoundOnDestroy("grenade_explosion", transform, 2);
 
                     oneTime = true;
-                }
-
-                if (networkObject.IsOwner)
-                {
-                    networkObject.position = transform.position;
-                    networkObject.rotation = transform.rotation;
-                }
-                else
-                {
-                    transform.position = networkObject.position;
-                    transform.rotation = networkObject.rotation;
                 }
             }
 

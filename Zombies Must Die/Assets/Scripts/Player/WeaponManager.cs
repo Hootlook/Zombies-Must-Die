@@ -60,9 +60,12 @@ public class WeaponManager : PlayerBehavior
         {
             if (i.isUsing)
             {
-                if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 1))
+                if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 2))
                 {
-                    hit.collider.GetComponent<IEntityBase>().OnInteract(transform);
+                    if (hit.collider.GetComponent<IEntityBase>() != null)
+                    {
+                        hit.collider.GetComponent<IEntityBase>().OnInteract(transform);
+                    }
                 }
             }
         }
@@ -74,7 +77,7 @@ public class WeaponManager : PlayerBehavior
             if (Input.GetKeyDown(KeyCode.G))
             {
                 WeaponBehavior g = NetworkManager.Instance.InstantiateWeapon(index: 1, position: weaponBone.position, rotation: weaponBone.rotation);
-                g.transform.SetParent(weaponBone);
+                g.GetComponent<WeaponBase>().EquipWeapon(transform);
             }
         }
     }

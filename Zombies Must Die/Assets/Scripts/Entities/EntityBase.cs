@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EntityBase : EntityBehavior
 {
-    public virtual void OnInteract() {}
+
 }
 
 interface IEntityBase
