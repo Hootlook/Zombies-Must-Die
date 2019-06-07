@@ -9,6 +9,7 @@ public class WeaponBase : WeaponBehavior
     public bool isShooting;
     public bool isReloading;
     public bool isArmed;
+    public bool isEquipped;
 
     private void Update()
     {
@@ -16,10 +17,12 @@ public class WeaponBase : WeaponBehavior
 
         if (networkObject.IsOwner)
         {
+            networkObject.isEquipped = isEquipped;
             networkObject.isArmed = isArmed;
         }
         else
         {
+            isEquipped = networkObject.isEquipped;
             isArmed = networkObject.isArmed;
         }
     }

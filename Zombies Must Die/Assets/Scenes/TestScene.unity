@@ -405,6 +405,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Modern Vending Machine
       objectReference: {fileID: 0}
+    - target: {fileID: 2288517142940134906, guid: 5fc3e9dde8a73614894452da562014c6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2290888368424076348, guid: 5fc3e9dde8a73614894452da562014c6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -459,6 +464,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2275585530975382654, guid: 5fc3e9dde8a73614894452da562014c6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2274696850778340668, guid: 5fc3e9dde8a73614894452da562014c6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2274874057875377740, guid: 5fc3e9dde8a73614894452da562014c6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822052069514765153, guid: 5fc3e9dde8a73614894452da562014c6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3149648601954978895, guid: 5fc3e9dde8a73614894452da562014c6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fc3e9dde8a73614894452da562014c6, type: 3}

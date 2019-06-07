@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.2,0.2,0]")]
+	[GeneratedInterpol("{\"inter\":[0.2,0.2,0,0]")]
 	public partial class WeaponNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 4;
+		public const int IDENTITY = 6;
 
 		private byte[] _dirtyFields = new byte[1];
 
@@ -108,6 +108,37 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (isArmedChanged != null) isArmedChanged(_isArmed, timestep);
 			if (fieldAltered != null) fieldAltered("isArmed", _isArmed, timestep);
 		}
+		[ForgeGeneratedField]
+		private bool _isEquipped;
+		public event FieldEvent<bool> isEquippedChanged;
+		public Interpolated<bool> isEquippedInterpolation = new Interpolated<bool>() { LerpT = 0f, Enabled = false };
+		public bool isEquipped
+		{
+			get { return _isEquipped; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_isEquipped == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[0] |= 0x8;
+				_isEquipped = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetisEquippedDirty()
+		{
+			_dirtyFields[0] |= 0x8;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_isEquipped(ulong timestep)
+		{
+			if (isEquippedChanged != null) isEquippedChanged(_isEquipped, timestep);
+			if (fieldAltered != null) fieldAltered("isEquipped", _isEquipped, timestep);
+		}
 
 		protected override void OwnershipChanged()
 		{
@@ -120,6 +151,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			positionInterpolation.current = positionInterpolation.target;
 			rotationInterpolation.current = rotationInterpolation.target;
 			isArmedInterpolation.current = isArmedInterpolation.target;
+			isEquippedInterpolation.current = isEquippedInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -129,6 +161,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _position);
 			UnityObjectMapper.Instance.MapBytes(data, _rotation);
 			UnityObjectMapper.Instance.MapBytes(data, _isArmed);
+			UnityObjectMapper.Instance.MapBytes(data, _isEquipped);
 
 			return data;
 		}
@@ -147,6 +180,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			isArmedInterpolation.current = _isArmed;
 			isArmedInterpolation.target = _isArmed;
 			RunChange_isArmed(timestep);
+			_isEquipped = UnityObjectMapper.Instance.Map<bool>(payload);
+			isEquippedInterpolation.current = _isEquipped;
+			isEquippedInterpolation.target = _isEquipped;
+			RunChange_isEquipped(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -160,6 +197,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _rotation);
 			if ((0x4 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isArmed);
+			if ((0x8 & _dirtyFields[0]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isEquipped);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -215,6 +254,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_isArmed(timestep);
 				}
 			}
+			if ((0x8 & readDirtyFlags[0]) != 0)
+			{
+				if (isEquippedInterpolation.Enabled)
+				{
+					isEquippedInterpolation.target = UnityObjectMapper.Instance.Map<bool>(data);
+					isEquippedInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_isEquipped = UnityObjectMapper.Instance.Map<bool>(data);
+					RunChange_isEquipped(timestep);
+				}
+			}
 		}
 
 		public override void InterpolateUpdate()
@@ -236,6 +288,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_isArmed = (bool)isArmedInterpolation.Interpolate();
 				//RunChange_isArmed(isArmedInterpolation.Timestep);
+			}
+			if (isEquippedInterpolation.Enabled && !isEquippedInterpolation.current.UnityNear(isEquippedInterpolation.target, 0.0015f))
+			{
+				_isEquipped = (bool)isEquippedInterpolation.Interpolate();
+				//RunChange_isEquipped(isEquippedInterpolation.Timestep);
 			}
 		}
 

@@ -54,13 +54,15 @@ public class WeaponManager : PlayerBehavior
             SelectWeapon(ps.selectedWeapon);
         }
         //CheckForChanges();
+
+        Debug.DrawRay(transform.position + Vector3.up * .5f, Camera.main.transform.forward, Color.cyan);
         if (networkObject.IsOwner)
         {
             if (i.isUsing)
             {
                 if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 1))
                 {
-                    Debug.Log(hit.transform.name);
+                    hit.collider.GetComponent<IEntityBase>().OnInteract(transform);
                 }
             }
         }

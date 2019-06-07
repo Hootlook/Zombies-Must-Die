@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : WeaponBehavior
+public class Grenade : WeaponBehavior, IEntityBase
 {
     public float explosionRadius = 12;
     public float proximity = 50;
@@ -21,56 +21,72 @@ public class Grenade : WeaponBehavior
         layerMask = ~layerMask;
 
         gameObject.name = "Grenade";
-        i = GetComponentInParent<Inputs>();
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         wb = GetComponent<WeaponBase>();
     }
 
+    public void OnInteract(Transform from)
+    {
+        if (networkObject.IsOwner)
+        {
+            rb.isKinematic = true;
+        }
+
+        transform.SetParent(from.GetComponent<WeaponManager>().weaponBone);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        i = GetComponentInParent<Inputs>();
+        wb.isEquipped = true;
+    }
+    
     void Update()
     {
         if (networkObject == null) return;
 
-        if (wb.isArmed)
+        if (wb.isEquipped)
         {
-            if (!oneTime)
+            if (wb.isArmed)
             {
-                transform.SetParent(null);
-                networkObject.position = transform.position;
-                networkObject.rotation = transform.rotation;
-                networkObject.positionInterpolation.target = transform.position;
-                networkObject.rotationInterpolation.target = transform.rotation;
-                networkObject.SnapInterpolations();
+                if (!oneTime)
+                {
+                    transform.SetParent(null);
+                    networkObject.position = transform.position;
+                    networkObject.rotation = transform.rotation;
+                    networkObject.positionInterpolation.target = transform.position;
+                    networkObject.rotationInterpolation.target = transform.rotation;
+                    networkObject.SnapInterpolations();
 
-                a.Play();
+                    a.Play();
+
+                    if (networkObject.IsOwner)
+                    {
+                        rb.isKinematic = false;
+                        rb.AddForce(Camera.main.transform.forward * 500);
+                        rb.AddTorque(transform.right * 500);
+                        networkObject.Destroy(4000);
+                    }
+
+                    FxManager.EmitParticleOnDestroy("WFX_Explosion", transform);
+                    FxManager.EmitSoundOnDestroy("grenade_explosion", transform, 2);
+
+                    oneTime = true;
+                }
 
                 if (networkObject.IsOwner)
                 {
-                    rb.isKinematic = false;
-                    rb.AddForce(Camera.main.transform.forward * 500);
-                    rb.AddTorque(transform.right * 500);
-                    networkObject.Destroy(4000);
+                    networkObject.position = transform.position;
+                    networkObject.rotation = transform.rotation;
                 }
-
-                FxManager.EmitParticleOnDestroy("WFX_Explosion", transform);
-                FxManager.EmitSoundOnDestroy("grenade_explosion", transform, 2);
-
-                oneTime = true;
+                else
+                {
+                    transform.position = networkObject.position;
+                    transform.rotation = networkObject.rotation;
+                }
             }
 
-            if (networkObject.IsOwner)
-            {
-                networkObject.position = transform.position;
-                networkObject.rotation = transform.rotation;
-            }
-            else
-            {
-                transform.position = networkObject.position;
-                transform.rotation = networkObject.rotation;
-            }
+            wb.isShooting = i.isShooting;
         }
-
-        wb.isShooting = i.isShooting;
     }
 
     private void OnDestroy()
