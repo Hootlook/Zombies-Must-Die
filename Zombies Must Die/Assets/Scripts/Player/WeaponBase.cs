@@ -1,4 +1,5 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,11 +15,18 @@ public class WeaponBase : WeaponBehavior, IEntityBase
     public Inputs i;
     public AudioSource a;
     public Rigidbody rb;
-    public WeaponBase wb;
 
-    public void OnInteract(Transform from)
+    protected override void NetworkStart()
     {
-        EquipWeapon(from);
+        base.NetworkStart();
+
+        a = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody>();
+    }
+
+    public void OnInteract(uint player)
+    {
+        networkObject.SendRpc(RPC_EQUIP_WEAPON, Receivers.All, player);
     }
 
     public void EquipWeapon(Transform from)
@@ -27,9 +35,8 @@ public class WeaponBase : WeaponBehavior, IEntityBase
         i = GetComponentInParent<Inputs>();
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
-        wb = GetComponent<WeaponBase>();
         rb.isKinematic = true;
-        wb.isEquipped = true;
+        isEquipped = true;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
@@ -52,5 +59,17 @@ public class WeaponBase : WeaponBehavior, IEntityBase
             transform.position = networkObject.position;
             transform.rotation = networkObject.rotation;
         }
+    }
+
+    public override void EquipWeapon(RpcArgs args)
+    {
+        transform.SetParent(GameObject.Find("Player " + args.GetNext<int>()).GetComponent<WeaponManager>().weaponBone);
+        i = GetComponentInParent<Inputs>();
+        a = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        isEquipped = true;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
     }
 }

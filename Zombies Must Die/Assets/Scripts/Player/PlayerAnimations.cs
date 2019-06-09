@@ -1,4 +1,5 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
@@ -69,5 +70,10 @@ public class PlayerAnimations : PlayerBehavior
     {
         if (i.isAiming)
             spine.rotation = Quaternion.Euler(spine.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 57, spine.rotation.eulerAngles.z);
+    }
+
+    public override void PlayerID(RpcArgs args)
+    {
+        throw new System.NotImplementedException();
     }
 }

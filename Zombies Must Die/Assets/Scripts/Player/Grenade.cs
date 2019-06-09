@@ -3,16 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grenade : WeaponBehavior
+public class Grenade : WeaponBase
 {
     public float explosionRadius = 12;
     public float proximity = 50;
     int layerMask = 1 << 11;
     bool oneTime = false;
-    WeaponBase wb;
-    AudioSource a;
-    Rigidbody rb;
-    Inputs i;
 
     protected override void NetworkStart()
     {
@@ -21,18 +17,15 @@ public class Grenade : WeaponBehavior
         layerMask = ~layerMask;
 
         gameObject.name = "Grenade";
-        a = GetComponent<WeaponBase>().a;
-        rb = GetComponent<WeaponBase>().rb;
-        wb = GetComponent<WeaponBase>().wb;
     }
 
     void Update()
     {
         if (networkObject == null) return;
 
-        if (wb.isEquipped)
+        if (isEquipped)
         {
-            if (wb.isArmed)
+            if (isArmed)
             {
                 if (!oneTime)
                 {
@@ -60,13 +53,13 @@ public class Grenade : WeaponBehavior
                 }
             }
 
-            wb.isShooting = i.isShooting;
+            isShooting = i.isShooting;
         }
     }
 
     private void OnDestroy()
     {
-        if (wb.isArmed)
+        if (isArmed)
         {
             Collider[] objectsInRange = Physics.OverlapSphere(transform.position, explosionRadius, layerMask);
             foreach (Collider col in objectsInRange)

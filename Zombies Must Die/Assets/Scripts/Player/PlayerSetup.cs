@@ -1,5 +1,8 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerSetup : PlayerBehavior
 {
@@ -13,12 +16,20 @@ public class PlayerSetup : PlayerBehavior
     CharacterController cc;
     public CameraController cameraController;
     WeaponManager wm;
-	public delegate void playerInstance();
+    public Text nameLabel;
+    public GameObject playerTitle;
+
+    public uint playerID = 0;
+
+
+    public delegate void playerInstance();
 	public static event playerInstance PlayerLoaded;
 
-	protected override void NetworkStart()
+    protected override void NetworkStart()
     {
         base.NetworkStart();
+
+        GameMode gameMode = GameObject.Find("GameMode").GetComponent<GameMode>();
 
         if (networkObject.IsOwner)
         {
@@ -32,10 +43,21 @@ public class PlayerSetup : PlayerBehavior
         cameraController = GameObject.Find("Camera(Clone)").GetComponent<CameraController>();
 
         PlayerLoaded();
-	}
-   
+    }
+
+    public override void PlayerID(RpcArgs args)
+    {
+        playerID = args.GetNext<uint>();
+
+        gameObject.name = "Player " + playerID;
+        nameLabel.text = "Player " + playerID;
+    }
+
     void Update()
     {
+        Vector3 namePos = Camera.main.WorldToScreenPoint(playerTitle.transform.position);
+        nameLabel.transform.position = namePos;
+
         if (networkObject != null)
         {
             if (networkObject.IsOwner)
@@ -60,4 +82,6 @@ public class PlayerSetup : PlayerBehavior
             }
         }        
     }
+
+
 }

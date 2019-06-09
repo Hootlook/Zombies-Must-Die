@@ -1,4 +1,5 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using System;
 using System.Collections;
@@ -21,7 +22,7 @@ public class WeaponManager : PlayerBehavior
         ps = GetComponent<PlayerSetup>();
         i = GetComponent<Inputs>();
 		SelectWeapon(selectedWeapon);
-	}
+    }
 
 	void Update()
     {
@@ -56,15 +57,16 @@ public class WeaponManager : PlayerBehavior
         //CheckForChanges();
 
         Debug.DrawRay(transform.position + Vector3.up * .5f, Camera.main.transform.forward, Color.cyan);
+
         if (networkObject.IsOwner)
         {
             if (i.isUsing)
             {
                 if (Physics.Raycast(transform.position + Vector3.up * .5f, Camera.main.transform.forward, out RaycastHit hit, 2))
                 {
-                    if (hit.collider.GetComponent<IEntityBase>() != null)
+                    if (hit.collider.GetComponentInParent<IEntityBase>() != null)
                     {
-                        hit.collider.GetComponent<IEntityBase>().OnInteract(transform);
+                        hit.collider.GetComponentInParent<IEntityBase>().OnInteract(ps.playerID);
                     }
                 }
             }
@@ -110,4 +112,9 @@ public class WeaponManager : PlayerBehavior
 			i++;
 		}
 	}
+
+    public override void PlayerID(RpcArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -376,6 +376,17 @@ namespace BeardedManStudios.Forge.Networking.Unity
         {
             GUI.Label(new Rect(10, 10, 100, 20), "IN: " + Networker.BandwidthIn);
             GUI.Label(new Rect(10, 25, 100, 20), "OUT: " + Networker.BandwidthOut);
+            GUI.Label(new Rect(10, 40, 100, 20), "ID: " + Instance.Networker.Me.NetworkId);
+            if (Instance.IsServer)
+            {
+                GUI.contentColor = Color.green;
+                GUI.Label(new Rect(10, 50, 100, 20), "<< Server >>");
+            }
+            else
+            {
+                GUI.contentColor = Color.blue;
+                GUI.Label(new Rect(10, 50, 100, 20), "<< Client >>");
+            }
         }
 
         protected virtual void ProcessOthers(Transform obj, NetworkObject createTarget, ref uint idOffset, NetworkBehavior netBehavior = null)
@@ -672,7 +683,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 					behavior.Initialize(Networker);
 
 			}
-
 			NetworkManager.Instance.InstantiatePlayer();
 
 		}

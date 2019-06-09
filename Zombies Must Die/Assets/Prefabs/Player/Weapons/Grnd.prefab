@@ -394,7 +394,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400010}
-  - component: {fileID: -3204695424292969868}
   - component: {fileID: 3835849809720000527}
   - component: {fileID: 2967116611023924374}
   - component: {fileID: 8339322601026883528}
@@ -421,22 +420,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3204695424292969868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6426661a494fc7a46b57234b0b817278, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 2
-  isShooting: 0
-  isReloading: 0
-  isArmed: 0
 --- !u!114 &3835849809720000527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,6 +432,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207853eda191e2848b77b203b9397c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 2
+  isShooting: 0
+  isReloading: 0
+  isArmed: 0
+  isEquipped: 0
+  i: {fileID: 0}
+  a: {fileID: 0}
+  rb: {fileID: 0}
   explosionRadius: 12
   proximity: 50
 --- !u!54 &2967116611023924374

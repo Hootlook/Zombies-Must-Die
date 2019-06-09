@@ -1,4 +1,5 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,11 @@ public class CameraController : PlayerBehavior {
 	public float vertical;
 
     Inputs i;
+
+    public override void PlayerID(RpcArgs args)
+    {
+        throw new System.NotImplementedException();
+    }
 
     protected override void NetworkStart()
     {

@@ -10,22 +10,39 @@ using UnityEngine;
 /// </summary>
 public class GameMode : GameManagerBehavior
 {
+    uint playerID = 0;
 
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
-        //safety check lol
-        if (!networkObject.IsServer)
+        // Don't think this needs to be moved to NetworkStart
+        if (NetworkManager.Instance.Networker.IsServer)
         {
-            return;
+            NetworkManager.Instance.Networker.playerAccepted += (player, networker) =>
+            {
+                // This will not be called on the server
+                playerID++;
+                networkObject.SendRpc(player, RPC_UPDATE_SERVER_ID, Receivers.Target, playerID);
+            };
         }
+    }
+
+    //This is the one RPC you will need to write on the NCW. Only thing u need in the NCW lel
+    public override void UpdateServerId(RpcArgs args)
+    {
+        // Safe to do this as we are not the server and not going to screw up the counter
+        //playerID = args.GetNext<int>();
+
+        //somehow find the local player and update it's name and label
+    }
+    protected override void NetworkStart()
+    {
+        base.NetworkStart();
 
         NetworkManager.Instance.Networker.playerAccepted += (player, sender) =>
         {
             MainThreadManager.Run(() =>
             {
-                //Do some counting logic here for a gamemode, eg, assign team to newly joined player, or restart round if enough people joined
-                //Remember to remove players from counter in playerDisconnected event as well
+
             });
         };
 
@@ -57,4 +74,6 @@ public class GameMode : GameManagerBehavior
             });
         };
     }
+
+
 }

@@ -1,4 +1,5 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
+﻿using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
 using UnityEngine;
 
 public class Inputs : PlayerBehavior
@@ -12,7 +13,12 @@ public class Inputs : PlayerBehavior
     public float mouseY;
     public float mouseWheel;
 
-	private void OnDisable()
+    public override void PlayerID(RpcArgs args)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void OnDisable()
 	{
         isJumping = false;
         isShooting = false;

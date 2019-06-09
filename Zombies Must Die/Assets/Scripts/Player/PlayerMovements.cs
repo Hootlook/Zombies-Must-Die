@@ -60,4 +60,9 @@ public class PlayerMovements : PlayerBehavior
             cc.Move(moveDirection * Time.deltaTime);
         }
 	}
+
+    public override void PlayerID(RpcArgs args)
+    {
+        throw new System.NotImplementedException();
+    }
 }

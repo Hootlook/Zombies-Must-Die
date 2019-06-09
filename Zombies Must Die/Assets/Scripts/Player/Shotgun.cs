@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shotgun : WeaponBehavior
+public class Shotgun : WeaponBase
 {
 	public int pellets = 6;
 	public float range = 30;
@@ -13,9 +13,6 @@ public class Shotgun : WeaponBehavior
     public float fireTimer;
     public float fireRate;
     PlayerSetup ps;
-    Inputs i;
-    AudioSource a;
-    WeaponBase wb;
     private Vector3 camForward;
 
 
@@ -23,10 +20,7 @@ public class Shotgun : WeaponBehavior
     {
         base.NetworkStart();
 
-        i = GetComponentInParent<Inputs>();
         ps = GetComponentInParent<PlayerSetup>();
-        wb = GetComponent<WeaponBase>();
-        a = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -41,7 +35,7 @@ public class Shotgun : WeaponBehavior
 		{
             if (fireTimer <= fireRate) return;
 
-            wb.isShooting = true;
+            isShooting = true;
 
 			for (int i = 0; i < pellets; i++)
 			{
@@ -66,6 +60,6 @@ public class Shotgun : WeaponBehavior
             fireTimer = 0;
         }
         
-        wb.isShooting = false;
+        isShooting = false;
     }
 }

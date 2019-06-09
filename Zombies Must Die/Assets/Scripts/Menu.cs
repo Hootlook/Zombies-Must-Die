@@ -75,6 +75,10 @@ public class Menu : PlayerBehavior
 		SceneManager.LoadScene(0);
 	}
 
+    public override void PlayerID(RpcArgs args)
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 
