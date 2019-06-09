@@ -12,28 +12,11 @@ public class GameMode : GameManagerBehavior
 {
     uint playerID = 0;
 
-    private void Start()
+    public uint GetNextPlayerId()
     {
-        // Don't think this needs to be moved to NetworkStart
-        if (NetworkManager.Instance.Networker.IsServer)
-        {
-            NetworkManager.Instance.Networker.playerAccepted += (player, networker) =>
-            {
-                // This will not be called on the server
-                playerID++;
-                networkObject.SendRpc(player, RPC_UPDATE_SERVER_ID, Receivers.Target, playerID);
-            };
-        }
+        return ++playerID;
     }
 
-    //This is the one RPC you will need to write on the NCW. Only thing u need in the NCW lel
-    public override void UpdateServerId(RpcArgs args)
-    {
-        // Safe to do this as we are not the server and not going to screw up the counter
-        //playerID = args.GetNext<int>();
-
-        //somehow find the local player and update it's name and label
-    }
     protected override void NetworkStart()
     {
         base.NetworkStart();
@@ -74,6 +57,4 @@ public class GameMode : GameManagerBehavior
             });
         };
     }
-
-
 }

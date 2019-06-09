@@ -72,7 +72,7 @@ public class PlayerAnimations : PlayerBehavior
             spine.rotation = Quaternion.Euler(spine.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 57, spine.rotation.eulerAngles.z);
     }
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         throw new System.NotImplementedException();
     }

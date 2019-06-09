@@ -8,7 +8,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 	[GeneratedRPCVariableNames("{\"types\":[[\"id\"]]")]
 	public abstract partial class PlayerBehavior : NetworkBehavior
 	{
-		public const byte RPC_PLAYER_I_D = 0 + 5;
+		public const byte RPC_PLAYER_ID = 0 + 5;
 		
 		public PlayerNetworkObject networkObject = null;
 
@@ -22,7 +22,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("PlayerID", PlayerID, typeof(uint));
+			networkObject.RegisterRpc("PlayerId", PlayerId, typeof(uint));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -103,7 +103,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// Arguments:
 		/// uint id
 		/// </summary>
-		public abstract void PlayerID(RpcArgs args);
+		public abstract void PlayerId(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

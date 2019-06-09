@@ -19,7 +19,7 @@ public class CameraController : PlayerBehavior {
 
     Inputs i;
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         throw new System.NotImplementedException();
     }

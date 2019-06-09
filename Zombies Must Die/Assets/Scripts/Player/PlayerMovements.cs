@@ -61,7 +61,7 @@ public class PlayerMovements : PlayerBehavior
         }
 	}
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         throw new System.NotImplementedException();
     }

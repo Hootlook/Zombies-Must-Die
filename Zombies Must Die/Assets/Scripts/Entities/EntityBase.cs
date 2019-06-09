@@ -11,5 +11,5 @@ public class EntityBase : EntityBehavior
 
 interface IEntityBase
 {
-    void OnInteract(uint player);
+    void OnInteract(int player);
 }

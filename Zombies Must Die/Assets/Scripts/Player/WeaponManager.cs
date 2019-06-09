@@ -66,7 +66,7 @@ public class WeaponManager : PlayerBehavior
                 {
                     if (hit.collider.GetComponentInParent<IEntityBase>() != null)
                     {
-                        hit.collider.GetComponentInParent<IEntityBase>().OnInteract(ps.playerID);
+                        hit.collider.GetComponentInParent<IEntityBase>().OnInteract((int)ps.playerID);
                     }
                 }
             }
@@ -113,7 +113,7 @@ public class WeaponManager : PlayerBehavior
 		}
 	}
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         throw new NotImplementedException();
     }

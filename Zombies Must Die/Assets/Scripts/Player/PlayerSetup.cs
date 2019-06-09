@@ -23,13 +23,25 @@ public class PlayerSetup : PlayerBehavior
 
 
     public delegate void playerInstance();
-	public static event playerInstance PlayerLoaded;
+    public static event playerInstance PlayerLoaded;
 
     protected override void NetworkStart()
     {
         base.NetworkStart();
 
-        GameMode gameMode = GameObject.Find("GameMode").GetComponent<GameMode>();
+        if (networkObject.IsServer)
+        {
+            GameMode gameMode = GameObject.Find("GameMode").GetComponent<GameMode>();
+
+            playerID = gameMode.GetNextPlayerId();
+            networkObject.SendRpc(RPC_PLAYER_ID, Receivers.OthersBuffered, playerID);
+
+            MainThreadManager.Run(() =>
+            {
+                gameObject.name = "Player " + playerID;
+                nameLabel.text = "Player " + playerID;
+            });
+        }
 
         if (networkObject.IsOwner)
         {
@@ -45,7 +57,7 @@ public class PlayerSetup : PlayerBehavior
         PlayerLoaded();
     }
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         playerID = args.GetNext<uint>();
 
@@ -80,8 +92,6 @@ public class PlayerSetup : PlayerBehavior
                 camAxis = networkObject.cameraAxis;
                 selectedWeapon = networkObject.selectedWeapon;
             }
-        }        
+        }
     }
-
-
 }

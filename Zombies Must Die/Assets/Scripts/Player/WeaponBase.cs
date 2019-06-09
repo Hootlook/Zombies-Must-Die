@@ -24,7 +24,7 @@ public class WeaponBase : WeaponBehavior, IEntityBase
         rb = GetComponent<Rigidbody>();
     }
 
-    public void OnInteract(uint player)
+    public void OnInteract(int player)
     {
         networkObject.SendRpc(RPC_EQUIP_WEAPON, Receivers.All, player);
     }

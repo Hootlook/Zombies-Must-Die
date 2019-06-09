@@ -380,12 +380,12 @@ namespace BeardedManStudios.Forge.Networking.Unity
             if (Instance.IsServer)
             {
                 GUI.contentColor = Color.green;
-                GUI.Label(new Rect(10, 50, 100, 20), "<< Server >>");
+                GUI.Label(new Rect(10, 60, 100, 20), "<< Server >>");
             }
             else
             {
                 GUI.contentColor = Color.blue;
-                GUI.Label(new Rect(10, 50, 100, 20), "<< Client >>");
+                GUI.Label(new Rect(10, 60, 100, 20), "-- Client --");
             }
         }
 

@@ -26,7 +26,7 @@ public class Menu : PlayerBehavior
 
     private void playerInstantiated()
 	{
-		i = GameObject.FindWithTag("Player").GetComponent<Inputs>();
+        i = GameObject.FindWithTag("Player").GetComponent<Inputs>();
 		cc = GameObject.FindWithTag("MainCamera").GetComponent<CameraController>();
 	}
 
@@ -49,7 +49,7 @@ public class Menu : PlayerBehavior
 			Cursor.visible = false;
 			i.enabled = true;
 			cc.enabled = true;
-		}
+        }
 	}
 
 	private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -75,7 +75,7 @@ public class Menu : PlayerBehavior
 		SceneManager.LoadScene(0);
 	}
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         throw new System.NotImplementedException();
     }

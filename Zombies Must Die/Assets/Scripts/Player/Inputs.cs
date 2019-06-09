@@ -13,7 +13,7 @@ public class Inputs : PlayerBehavior
     public float mouseY;
     public float mouseWheel;
 
-    public override void PlayerID(RpcArgs args)
+    public override void PlayerId(RpcArgs args)
     {
         throw new System.NotImplementedException();
     }
