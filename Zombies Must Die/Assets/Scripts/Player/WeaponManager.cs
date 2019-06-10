@@ -71,17 +71,6 @@ public class WeaponManager : PlayerBehavior
                 }
             }
         }
-
-
-        //JUST FOR DEBUGGING
-        if (networkObject.IsOwner)
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                WeaponBehavior g = NetworkManager.Instance.InstantiateWeapon(index: 1, position: weaponBone.position, rotation: weaponBone.rotation);
-                g.GetComponent<WeaponBase>().EquipWeapon(transform);
-            }
-        }
     }
 
     private void CheckForChanges()

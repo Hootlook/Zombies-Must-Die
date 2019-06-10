@@ -23,8 +23,9 @@ public class Shotgun : WeaponBase
         ps = GetComponentInParent<PlayerSetup>();
     }
 
-    void Update()
+    new void Update()
     {
+        base.Update();
         if (networkObject == null) return;
 
         if (fireTimer < fireRate) fireTimer += Time.fixedDeltaTime;

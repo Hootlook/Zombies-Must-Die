@@ -19,9 +19,9 @@ public class Grenade : WeaponBase
         gameObject.name = "Grenade";
     }
 
-    void Update()
+    private new void Update()
     {
-        if (networkObject == null) return;
+        base.Update();
 
         if (isEquipped)
         {

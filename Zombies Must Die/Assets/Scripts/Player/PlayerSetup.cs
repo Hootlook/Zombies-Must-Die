@@ -21,7 +21,6 @@ public class PlayerSetup : PlayerBehavior
 
     public uint playerID = 0;
 
-
     public delegate void playerInstance();
     public static event playerInstance PlayerLoaded;
 
@@ -36,11 +35,8 @@ public class PlayerSetup : PlayerBehavior
             playerID = gameMode.GetNextPlayerId();
             networkObject.SendRpc(RPC_PLAYER_ID, Receivers.OthersBuffered, playerID);
 
-            MainThreadManager.Run(() =>
-            {
-                gameObject.name = "Player " + playerID;
-                nameLabel.text = "Player " + playerID;
-            });
+            gameObject.name = "Player " + playerID;
+            nameLabel.text = "Player " + playerID;
         }
 
         if (networkObject.IsOwner)

@@ -22,6 +22,12 @@ public class WeaponBase : WeaponBehavior, IEntityBase
 
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
+
+        networkObject.position = transform.position;
+        networkObject.rotation = transform.rotation;
+        networkObject.positionInterpolation.target = transform.position;
+        networkObject.rotationInterpolation.target = transform.rotation;
+        networkObject.SnapInterpolations();
     }
 
     public void OnInteract(int player)
@@ -29,35 +35,33 @@ public class WeaponBase : WeaponBehavior, IEntityBase
         networkObject.SendRpc(RPC_EQUIP_WEAPON, Receivers.All, player);
     }
 
-    public void EquipWeapon(Transform from)
-    {
-        transform.SetParent(from.GetComponent<WeaponManager>().weaponBone);
-        i = GetComponentInParent<Inputs>();
-        a = GetComponent<AudioSource>();
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
-        isEquipped = true;
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-    }
-
-    private void Update()
+    protected void Update()
     {
         if (networkObject == null) return;
+
+        if (transform.parent == null)
+        {
+            if (networkObject.IsOwner)
+            {
+                networkObject.position = transform.position;
+                networkObject.rotation = transform.rotation;
+            }
+            else
+            {
+                transform.position = networkObject.position;
+                transform.rotation = networkObject.rotation;
+            }
+        }
 
         if (networkObject.IsOwner)
         {
             networkObject.isEquipped = isEquipped;
             networkObject.isArmed = isArmed;
-            networkObject.position = transform.position;
-            networkObject.rotation = transform.rotation;
         }
         else
         {
             isEquipped = networkObject.isEquipped;
             isArmed = networkObject.isArmed;
-            transform.position = networkObject.position;
-            transform.rotation = networkObject.rotation;
         }
     }
 
