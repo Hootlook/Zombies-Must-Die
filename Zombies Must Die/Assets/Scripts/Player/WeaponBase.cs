@@ -13,8 +13,8 @@ public class WeaponBase : WeaponBehavior, IEntityBase
     public bool isEquipped;
 
     public Inputs i;
-    public AudioSource a;
     public Rigidbody rb;
+    public AudioSource a;
 
     protected override void NetworkStart()
     {
@@ -67,7 +67,8 @@ public class WeaponBase : WeaponBehavior, IEntityBase
 
     public override void EquipWeapon(RpcArgs args)
     {
-        transform.SetParent(GameObject.Find("Player " + args.GetNext<int>()).GetComponent<WeaponManager>().weaponBone);
+        GameObject target = GameObject.Find("Player " + args.GetNext<int>());
+        transform.SetParent(target.GetComponent<WeaponManager>().weaponBone);
         i = GetComponentInParent<Inputs>();
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
@@ -75,5 +76,6 @@ public class WeaponBase : WeaponBehavior, IEntityBase
         isEquipped = true;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+        target.GetComponent<WeaponManager>().SelectWeapon(transform.childCount);
     }
 }

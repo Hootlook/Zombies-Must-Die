@@ -47,7 +47,6 @@ public class CameraController : PlayerBehavior {
             transform.rotation = rotation;
             transform.position = Target.position + rotation * offset;
             //Camera.main.transform.localRotation = Quaternion.Euler(vertical, 0, 0);
-
         }
         else
         {

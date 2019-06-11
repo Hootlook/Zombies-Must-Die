@@ -54,7 +54,6 @@ public class WeaponManager : PlayerBehavior
             selectedWeapon = ps.selectedWeapon;
             SelectWeapon(ps.selectedWeapon);
         }
-        //CheckForChanges();
 
         Debug.DrawRay(transform.position + Vector3.up * .5f, Camera.main.transform.forward, Color.cyan);
 
@@ -70,19 +69,6 @@ public class WeaponManager : PlayerBehavior
                     }
                 }
             }
-        }
-    }
-
-    private void CheckForChanges()
-    {
-        int actifWeapons = 0;
-        foreach (Transform weapon in weaponBone)
-        {
-            if (weapon.gameObject.activeInHierarchy == true) actifWeapons++;
-        }
-        if (actifWeapons == 0)
-        {
-            SelectWeapon(0);
         }
     }
 

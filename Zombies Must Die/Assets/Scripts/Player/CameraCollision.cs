@@ -12,6 +12,8 @@ public class CameraCollision : MonoBehaviour
 	public float distance;
 	int layerMask;
 
+    public float adjust = 1;
+
 	void Awake()
 	{
 		dollyDir = transform.localPosition.normalized;
@@ -25,16 +27,16 @@ public class CameraCollision : MonoBehaviour
 		Vector3 desiredCameraPos = transform.parent.TransformPoint(dollyDir * maxDistance);
 		RaycastHit hit;
 
-		if (Physics.Linecast(transform.parent.position, desiredCameraPos, out hit, layerMask))
+        adjust = Input.GetButton("Fire2") ? -2 : 1;
+
+		if (Physics.Linecast(transform.parent.position + (Camera.main.transform.forward * adjust), desiredCameraPos, out hit, layerMask))
 		{
 			distance = Mathf.Clamp((hit.distance * 0.87f), minDistance, maxDistance);
-
 		}
 		else
 		{
 			distance = maxDistance;
 		}
-        Debug.DrawLine(transform.parent.position, desiredCameraPos, Color.red);
 
 		transform.localPosition = Vector3.Lerp(transform.localPosition, dollyDir * distance, Time.deltaTime * smooth);
 	}
