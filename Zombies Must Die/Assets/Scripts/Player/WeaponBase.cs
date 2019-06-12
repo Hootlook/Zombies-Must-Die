@@ -69,6 +69,7 @@ public class WeaponBase : WeaponBehavior, IEntityBase
     {
         GameObject target = GameObject.Find("Player " + args.GetNext<int>());
         transform.SetParent(target.GetComponent<WeaponManager>().weaponBone);
+        target.GetComponent<WeaponManager>().SelectWeapon(transform.childCount);
         i = GetComponentInParent<Inputs>();
         a = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
@@ -76,6 +77,5 @@ public class WeaponBase : WeaponBehavior, IEntityBase
         isEquipped = true;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        target.GetComponent<WeaponManager>().SelectWeapon(transform.childCount);
     }
 }

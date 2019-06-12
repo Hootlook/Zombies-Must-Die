@@ -33,10 +33,7 @@ public class PlayerSetup : PlayerBehavior
             GameMode gameMode = GameObject.Find("GameMode").GetComponent<GameMode>();
 
             playerID = gameMode.GetNextPlayerId();
-            networkObject.SendRpc(RPC_PLAYER_ID, Receivers.OthersBuffered, playerID);
-
-            gameObject.name = "Player " + playerID;
-            nameLabel.text = "Player " + playerID;
+            networkObject.SendRpc(RPC_PLAYER_ID, Receivers.AllBuffered, playerID);
         }
 
         if (networkObject.IsOwner)
