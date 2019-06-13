@@ -683,7 +683,7 @@ namespace BeardedManStudios.Forge.Networking.Unity
 					behavior.Initialize(Networker);
 
 			}
-			NetworkManager.Instance.InstantiatePlayer();
+            NetworkManager.Instance.InstantiatePlayer(0, Vector3.up * 5);
 
 		}
 	}

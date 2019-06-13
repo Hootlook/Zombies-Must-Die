@@ -73,6 +73,11 @@ public class Grenade : WeaponBase
 
                         EZCameraShake.CameraShaker.Instance.ShakeOnce(5, proximity, 0, 1);
                     }
+
+                    if(hit.collider.tag == "Enemy")
+                    {
+                        Debug.Log(hit.collider.name);
+                    }
                 }
             }
         }

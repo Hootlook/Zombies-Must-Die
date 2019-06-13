@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
 
     //Life
-    public float Life { get; set; }
+    public float Life;
     public float Legs { get; set; }
     public float Armor { get; set; }
     private bool Damaged;
